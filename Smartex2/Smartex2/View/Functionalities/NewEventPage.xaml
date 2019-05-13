@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Smartex2.View.Functionalities.NewEventPage"
+             Style="{StaticResource page}">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout VerticalOptions="Center"
+        Margin="20,0">
+                <Label Text="Temat wydarzenia" 
+               Style="{StaticResource h1Label}"/>
+                <Entry x:Name="eventNameEntry"/>
+
+                <Label Text="Data" 
+               Style="{StaticResource h1Label}"/>
+                <DatePicker x:Name="eventDateEntry"/>
+
+                <Label Text="Opis wydarzenia" 
+               Style="{StaticResource h1Label}"/>
+                <Editor x:Name="eventDescriptionEntry"
+                AutoSize="TextChanges"/>
+
+                <Label Text="Zaproś osoby" 
+               Style="{StaticResource h1Label}"/>
+                <Entry x:Name="inviteEntry"
+               Placeholder="Podaj email"/>
+
+                <Button x:Name="sendEventButton"
+                Text="Dodaj wydarzenie"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

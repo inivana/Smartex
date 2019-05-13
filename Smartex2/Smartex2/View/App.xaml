@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Smartex2.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Styl stron -->
+            <Color x:Key="pageBgColor">#B8B8D1</Color>
+
+            <Style x:Key="page" TargetType="Page">
+                <Setter Property="BackgroundColor" Value="{StaticResource pageBgColor}"></Setter>
+            </Style>
+
+            <!-- Styl entries -->
+
+            <!-- Styl przycisków -->
+            <Color x:Key="buttonBgColor">#FAC8CD</Color>
+            <Color x:Key="buttonTxtColor">#333333</Color>
+
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource buttonBgColor}"></Setter>
+                <Setter Property="TextColor" Value="{StaticResource buttonTxtColor}"></Setter>
+            </Style>
+
+            <!-- Styl etykiet H1 -->
+            <Color x:Key="h1TextColor">#D30C7B</Color>
+
+            <Style x:Key="h1Label" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource h1TextColor}"></Setter>
+                <Setter Property="FontSize">24</Setter>
+                <Setter Property="FontAttributes">Bold</Setter>
+            </Style>
+
+            <!-- Styl etykiet H2 -->
+            <Color x:Key="h2TextColor">#F7AEF8</Color>
+
+            <Style x:Key="h2Label" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource h2TextColor}"></Setter>
+                <Setter Property="FontSize">18</Setter>
+                <Setter Property="FontAttributes">Bold</Setter>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

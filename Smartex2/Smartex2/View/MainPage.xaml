@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Smartex2"
+             x:Class="Smartex2.MainPage"
+             Style="{StaticResource page}"
+             NavigationPage.HasNavigationBar="False"
+             NavigationPage.HasBackButton="False">
+
+    <StackLayout VerticalOptions="Center"
+        Margin="20">
+        <!-- Place new controls here -->
+        <Entry x:Name="LoginEntry"
+               Text="{Binding Login, Mode=TwoWay}"
+               Placeholder="Login"/>
+
+        <Entry x:Name="PasswordEntry"
+               Text="{Binding Password, Mode=TwoWay}"
+               Placeholder="Hasło"
+               IsPassword="True"/>
+
+        <Button x:Name="LoginButton"
+                Text="Zaloguj"
+                Command="{Binding LoginCommand}"
+                CommandParameter="{Binding User}"/>
+        <Button x:Name="RegisterButton"
+                Text="Nie masz konta?"
+                Command="{Binding GoToRegistrationPageCommand}"
+                CommandParameter="{Binding User}"/>
+    </StackLayout>
+
+</ContentPage>
+ 

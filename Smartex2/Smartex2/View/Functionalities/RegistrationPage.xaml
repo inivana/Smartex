@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Smartex2.View.RegistrationPage"
+             Style="{StaticResource page}"
+             NavigationPage.HasBackButton="False"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Label Text="Rejestracja"
+                       Style="{StaticResource h1Label}"/>
+
+                <Entry x:Name="FirstNameEntry"
+                   Placeholder="Imię"
+                   Text="{Binding FirstName, Mode=TwoWay}"/>
+
+                <Entry x:Name="LastNameEntry" 
+                   Placeholder="Nazwisko"
+                   Text="{Binding LastName, Mode=TwoWay}"/>
+
+                <Entry x:Name="EmailEntry"
+                   Placeholder="Email"
+                   Keyboard="Email"
+                   Text="{Binding Email, Mode=TwoWay}"/>
+
+                <Entry x:Name="LoginEntry"
+                       Placeholder="Login"
+                       Text="{Binding Login, Mode=TwoWay}"/>
+
+                <Entry x:Name="PasswordEntry"
+                   Placeholder="Hasło (min 8 znaków)"
+                   IsPassword="True"
+                   MaxLength="16"
+                   Text="{Binding Password, Mode=TwoWay}"/>
+
+                <Entry x:Name="UniversityEntry"
+                   Placeholder="Uczelnia"
+                   Text="{Binding University, Mode=TwoWay}"/>
+
+                <Entry x:Name="FacultyEntry"
+                   Placeholder="Wydział"
+                   Text="{Binding Faculty, Mode=TwoWay}"/>
+
+                <Entry x:Name="FieldOfStudyEntry"
+                   Placeholder="Uczelnia"
+                   Text="{Binding FieldOfStudy, Mode=TwoWay}"/>
+
+                <Button x:Name="registerButton"
+                    Text="Zarejestruj się"
+                    Command="{Binding RegisterCommand}"
+                    CommandParameter="{Binding User}"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
