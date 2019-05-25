@@ -1,55 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Smartex2.Model
+namespace Smartex.Model
 {
-    public class Event
+    class Event
     {
-        private int _id;
-        private int _userId;
-        private string _title;
-        private DateTime _startDateTime;
-        private string _description;
-        private DateTime _creationDateTime;
+        [JsonProperty(PropertyName = "id")]
+        public int ID { get; set; }
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; set; }
+        [JsonProperty(PropertyName = "start_date")]
+        public string StartDate { get; set; }
+        [JsonProperty(PropertyName = "desc")]
+        public string Desc { get; set; }
+        [JsonProperty(PropertyName = "creation_date")]
+        public string CreationDate { get; set; }
+        [JsonProperty(PropertyName = "user_id")]
+        public int UserID { get; set; }
 
-
-
-
-        //properties
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-        
-        public int UserId
-        {
-            get { return _userId; }
-            set { _userId = value; }
-        }
-
-        public string Title
-        {
-            get { return _title; }
-            set { _title = value; }
-        }
-
-        public DateTime StartDateTime
-        {
-            get { return _startDateTime; }
-            set { _startDateTime = value; }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
-
-        public DateTime CreationDateTime
-        {
-            get { return _creationDateTime; }
-            set { _creationDateTime = value; }
-        }
-
+        public List<Post> Posts { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Smartex2.View;
-using Smartex2.View.Functionalities;
-using Smartex2.ViewModel.Command;
+using Smartex.View;
+using Smartex.View.Functionalities;
+using Smartex.ViewModel.Command;
 using Xamarin.Forms;
 
-namespace Smartex2.ViewModel
+namespace Smartex.ViewModel
 {
     public class HomeVM
     {

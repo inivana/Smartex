@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using Smartex2.View;
+using Smartex.View;
 
-namespace Smartex2.ViewModel.Command
+namespace Smartex.ViewModel.Command
 {
     public class GoToRegistrationPageCommand : ICommand
     {

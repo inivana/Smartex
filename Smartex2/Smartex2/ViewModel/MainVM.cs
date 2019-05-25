@@ -1,11 +1,12 @@
-﻿using Smartex2.Annotations;
-using Smartex2.Model;
-using Smartex2.ViewModel.Command;
+﻿using Smartex.Annotations;
+using Smartex.Model;
+using Smartex.ViewModel.Command;
 using System.ComponentModel;
-using Smartex2.View;
+using Smartex.View;
 using Xamarin.Forms;
+using Smartex.Exception;
 
-namespace Smartex2.ViewModel
+namespace Smartex.ViewModel
 {
     public class MainVM : INotifyPropertyChanged
     {
@@ -17,18 +18,18 @@ namespace Smartex2.ViewModel
         public LoginCommand LoginCommand { get; set; }
         public GoToRegistrationPageCommand GoToRegistrationPageCommand { get; set; }
 
-        private User _user;
+        private UserPersonalInfo _user;
         private string _login;
         private string _password;
 
         //properties
-        public User User
+        public UserPersonalInfo UserPersonalInfoProp
         {
             get { return _user; }
             set
             {
                 _user = value;
-                OnPropertyChanged("User");
+                OnPropertyChanged("UserPersonalInfoProp");
             }
         }
         public string Login
@@ -37,7 +38,7 @@ namespace Smartex2.ViewModel
             set
             {
                 _login = value;
-                User = new User()
+                UserPersonalInfoProp = new UserPersonalInfo()
                 {
                     Login = this.Login,
                     Password = this.Password
@@ -52,7 +53,7 @@ namespace Smartex2.ViewModel
             set
             {
                 _password = value;
-                User = new User()
+                UserPersonalInfoProp = new UserPersonalInfo()
                 {
                     Login = this.Login,
                     Password = this.Password
@@ -64,7 +65,7 @@ namespace Smartex2.ViewModel
         //konstruktor
         public MainVM()
         {
-            this.User = new User();
+            this.UserPersonalInfoProp = new UserPersonalInfo();
             this.LoginCommand = new LoginCommand(this);
             this.GoToRegistrationPageCommand = new GoToRegistrationPageCommand(this);
         }
@@ -84,14 +85,20 @@ namespace Smartex2.ViewModel
         //metody
         public async void LoginUser()
         {
-            bool canLogin = User.LoginUser(User.Login, User.Password);
-            if (canLogin)
+            try
             {
+                await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE);
+
             }
-            else
+            catch (LoginException ex)
             {
-                await App.Current.MainPage.DisplayAlert("Błąd", "Login lub hasło są nieprawidłowe", "OK");
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+
+            }
+            catch (System.Exception ex)
+            {
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
 

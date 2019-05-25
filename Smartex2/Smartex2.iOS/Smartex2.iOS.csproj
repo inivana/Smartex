@@ -152,9 +152,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Smartex2\Smartex2.csproj">
-      <Project>{7C0E8696-D010-4ABC-8F17-853609CE7422}</Project>
-      <Name>Smartex2</Name>
+    <ProjectReference Include="..\Smartex2\Smartex.csproj">
+      <Project>{E7DAF01E-FFDD-414D-8D11-03A249110315}</Project>
+      <Name>Smartex</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

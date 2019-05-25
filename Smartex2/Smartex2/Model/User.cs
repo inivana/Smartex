@@ -1,139 +1,349 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Newtonsoft.Json;
+using Smartex.Exception;
+using Smartex.Server;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Smartex2.Model
+namespace Smartex.Model
 {
-    public class User : INotifyPropertyChanged
+    class User
     {
-        private int _id;
-        private string _firstName;
-        private string _lastName;
-        private string _email;
-        private string _login;
-        private string _password;
-        private string _university;
-        private string _faculty;
-        private string _fieldOfStudy;
-        public List<Event> Events { get; set; }
+        private static List<Event> events = new List<Event>();
+        private static Dictionary<int, Event> eventMap = new Dictionary<int, Event>();
 
-        public User()
+        // use: sieganie po zasoby usera( W TRAKCIE UZYTKOWANIA APPKI)
+        public static UserPersonalInfo GetPersonalInfo()
         {
-            /* TODO
-             * Uzupełnić listę Events o eventy, w których uczestniczy user
-             */
-        }
-
-        //potrzebne do bindowania
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChange(string propertyName)
-        {
-            if (PropertyChanged != null)
+            try
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                //wczytaj dane z pliku i ustaw credential REST.StoreCredential(string login,password);
+                //jesli danych nie ma throw new SessionExpiredException() -> ponowne zalogowanie
+                ServerAnswerRecievedUser recievedUser = ClientBackend.CurrentUser().Result;
+                if (recievedUser.Status.Equals("success"))
+                {
+                    return recievedUser.User;
+                }
+                else throw new DataFormatException();
             }
-        }
-
-        //methods
-        public bool LoginUser(string login, string password)
-        {
-            /* TODO
-             * walidacja usera, sprawdzanie z restem
-             * itede w/e
-             * ma zwracać true, jeżeli się da zalogować a false jak nie
-             */
-            return true;
-        }
-        public bool RegisterUser(string firstname, string lastname, string login, string password, string university,
-            string faculty, string fieldOfStudy)
-        {
-            /* TODO
-             * sprawdzanie, czy da sie dodac usera
-             * np: sprawdzanie, czy nie ma takiego maila w bazie
-             */
-            return true;
+            catch (TaskCanceledException)
+            {
+                throw;
+            }
+            catch (SessionExpiredException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
         }
 
-        //properties
-        public int Id
+        // use: sieganie po eventy usera
+        public static async Task<List<Event>> GetEvents(int userID)
         {
-            get { return _id; }
-            set
+
+            try
             {
-                _id = value;
-                OnPropertyChange("Id");
+                ServerAnswerRecievedEvents recievedEvent = JsonConvert.DeserializeObject<ServerAnswerRecievedEvents>
+                      (await ClientBackend.GetResponse("/events/" + userID));
+
+                if (recievedEvent.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    eventMap.Clear();
+                    events = recievedEvent.EventList;
+                    if (events == null) throw new UnknownException();
+                    foreach (Event element in events) eventMap.Add(element.ID, element);
+                    return events;
+                }
+                else throw new DataFormatException();
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+
+        }
+
+        // use: sieganie po posty w konkretnym eventcie
+        public static async Task<List<Post>> GetPosts(int eventID)
+        {
+            try
+            {
+                ServerAnswerRecievedPosts sarp = JsonConvert.DeserializeObject
+                    <ServerAnswerRecievedPosts>(await ClientBackend.GetResponse("/posts/" + eventID));
+
+                if (sarp.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    eventMap[eventID].Posts = sarp.PostList;
+                    if (eventMap[eventID].Posts == null) throw new System.Exception();
+                    return eventMap[eventID].Posts;
+                }
+                else throw new DataFormatException();
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+
+        }
+
+
+        public static async Task AddPost(Post post)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(post);
+
+                var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/posts")
+                     , new StringContent(json, Encoding.UTF8, "application/json"));
+
+                response.EnsureSuccessStatusCode();
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+                if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new DataFormatException();
+                }
+
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new System.Exception();
+            }
+
+        }
+
+        public static async Task AddEvent(Event event_)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(event_);
+
+                var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/events")
+                     , new StringContent(json, Encoding.UTF8, "application/json"));
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+                if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new DataFormatException();
+                }
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+        }
+        public static async Task UpdateEvent(Event event_)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(event_);
+
+                var response = await ClientBackend.client.PutAsync((ClientBackend.api_domain + "/events/" + event_.ID)
+                     , new StringContent(json, Encoding.UTF8, "application/json"));
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+                if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                    throw new DataFormatException();
+
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
             }
         }
-        public string FirstName
+        public static async Task DeleteEvent(Event event_)
         {
-            get { return _firstName; }
-            set
+            try
             {
-                _firstName = value;
-                OnPropertyChange("FirstName");
+                var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/events/" + event_.ID);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+                if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                    throw new DataFormatException();
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+        }
+
+        public static async Task UpdatePost(Post post)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(post);
+
+                var response = await ClientBackend.client.PutAsync((ClientBackend.api_domain + "/posts/" + post.ID)
+                     , new StringContent(json, Encoding.UTF8, "application/json"));
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+                if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new DataFormatException();
+                }
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+        }
+        public static async Task DeletePost(Post post)
+        {
+            try
+            {
+                var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/posts/" + post.ID);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+
+                if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                    throw new DataFormatException();
+            }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
             }
         }
-        public string LastName
+
+
+        public static Event GetEvent(int eventID)
         {
-            get { return _lastName; }
-            set
+            if (!eventMap.ContainsKey(eventID)) throw new System.Exception(); //do zmiany
+            return eventMap[eventID];
+        }
+
+        public static Post GetPost(int postID, int eventID)
+        {
+            if (!eventMap.ContainsKey(eventID)) throw new System.Exception(); //do zmiany
+            return eventMap[eventID].Posts.Find(post => post.ID == postID); // ArgumentNullException
+        }
+
+        // use: tylko po przycisku zaloguj
+        public static async Task Login(String username, String password)
+        {
+            try
             {
-                _lastName = value;
-                OnPropertyChange("LastName");
+                ClientBackend.StroreCredentials(username, password);
+                String json = await ClientBackend.GetResponse("/user");
+
+                ServerAnswerRecievedUser userData = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
+
+                if (userData.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    //ClientBackend.StroreCredentials(username, password);
+                    //zapisz dane do pliku jesli sie udalo zalogowac
+                    //jesli nie exception  throw new LoginException()
+                }
+                else
+                    throw new LoginException();
+            }
+            catch (LoginException)
+            {
+                throw new LoginException();
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
             }
         }
-        public string Login
+
+
+        public static async Task RegisterUser(UserPersonalInfo userPersonalInfo)
         {
-            get { return _login; }
-            set
+            try
             {
-                _login = value;
-                OnPropertyChange("Login");
+                string json = JsonConvert.SerializeObject(userPersonalInfo);
+
+                var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/user"),
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+                if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    ClientBackend.StroreCredentials(userPersonalInfo.Login, userPersonalInfo.Password);
+                }
+                else
+                    throw new DataFormatException();
             }
+            catch (DataFormatException)
+            {
+                throw;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
         }
-        public string Email
+        //use: usuwa z pliku login,haslo
+        public static void Logout()
         {
-            get { return _email; }
-            set
-            {
-                _email = value;
-                OnPropertyChange("Email");
-            }
+            ClientBackend.RemoveCredentials();
+            //try catch throw new UnExpectedException();
         }
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
-                OnPropertyChange("Password");
-            }
-        }
-        public string University
-        {
-            get { return _university; }
-            set
-            {
-                _university = value;
-                OnPropertyChange("University");
-            }
-        }
-        public string Faculty
-        {
-            get { return _faculty; }
-            set
-            {
-                _faculty = value;
-                OnPropertyChange("Faculty");
-            }
-        }
-        public string FieldOfStudy
-        {
-            get { return _fieldOfStudy; }
-            set
-            {
-                _fieldOfStudy = value;
-                OnPropertyChange("FieldOfStudy");
-            }
-        }
+
     }
 }

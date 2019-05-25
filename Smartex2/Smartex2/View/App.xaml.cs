@@ -1,10 +1,10 @@
 ﻿using System;
-using Smartex2.View;
+using Smartex.View;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Smartex2
+namespace Smartex
 {
     public partial class App : Application
     {

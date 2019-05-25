@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace Smartex2.iOS
+namespace Smartex.iOS
 {
     public class Application
     {

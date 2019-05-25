@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Smartex2.ViewModel;
+using Smartex.ViewModel;
 using Xamarin.Forms;
 
-namespace Smartex2
+namespace Smartex
 {
     public partial class MainPage : ContentPage
     {

@@ -1,15 +1,15 @@
-﻿using Smartex2.Annotations;
-using Smartex2.Model;
-using Smartex2.ViewModel.Command;
+﻿using Smartex.Annotations;
+using Smartex.Model;
+using Smartex.ViewModel.Command;
 using System.ComponentModel;
 using Xamarin.Forms;
 
-namespace Smartex2.ViewModel
+namespace Smartex.ViewModel
 {
     public class RegistrationVM : INotifyPropertyChanged
     {
         public RegisterCommand RegisterCommand { get; set; }
-        private User _user;
+        private UserPersonalInfo _user;
         private string _firstName;
         private string _lastName;
         private string _login;
@@ -20,7 +20,7 @@ namespace Smartex2.ViewModel
         private string _fieldOfStudy;
 
         //prop
-        public User User
+        public UserPersonalInfo UserPersonalInfoProp
         {
             get { return _user; }
             set { _user = value; }
@@ -117,13 +117,12 @@ namespace Smartex2.ViewModel
 
         public RegistrationVM()
         {
-            this._user = new User();
+            this._user = new UserPersonalInfo();
             this.RegisterCommand = new RegisterCommand(this);
         }
         public async void RegisterUser()
         {
-            bool canRegister = User.RegisterUser(User.FirstName, User.LastName, User.Login, User.Password,
-                User.University, User.Faculty, User.FieldOfStudy);
+            bool canRegister = true;
 
             if (canRegister)
             {

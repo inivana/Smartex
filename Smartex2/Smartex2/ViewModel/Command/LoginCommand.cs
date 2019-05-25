@@ -1,8 +1,8 @@
 ﻿using System;
-using Smartex2.Model;
+using Smartex.Model;
 using System.Windows.Input;
 
-namespace Smartex2.ViewModel.Command
+namespace Smartex.ViewModel.Command
 {
     public class LoginCommand : ICommand
     {
@@ -19,7 +19,7 @@ namespace Smartex2.ViewModel.Command
             /* TODO
              * walidacja z usera, przekazywanego jako parametr 
              */
-            var user = (User)parameter;
+            var user = (UserPersonalInfo)parameter;
 
             if (user == null)
             {

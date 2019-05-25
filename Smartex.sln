@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartex2.Android", "Smartex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartex2.iOS", "Smartex2\Smartex2.iOS\Smartex2.iOS.csproj", "{A491FA11-F7A3-4E15-A362-6222A0A61E83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartex2", "Smartex2\Smartex2\Smartex2.csproj", "{E7DAF01E-FFDD-414D-8D11-03A249110315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smartex", "Smartex2\Smartex2\Smartex.csproj", "{E7DAF01E-FFDD-414D-8D11-03A249110315}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

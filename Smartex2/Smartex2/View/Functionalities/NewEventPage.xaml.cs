@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Smartex2.View.Functionalities
+namespace Smartex.View.Functionalities
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class NewEventPage : ContentPage

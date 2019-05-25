@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:view="clr-namespace:Smartex2.View;assembly=Smartex2"
-             x:Class="Smartex2.View.RootPage"
+             xmlns:view="clr-namespace:Smartex.View;assembly=Smartex"
+             x:Class="Smartex.View.RootPage"
              Style="{StaticResource page}">
     <MasterDetailPage.Master>
         <view:MenuPage />

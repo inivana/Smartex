@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Smartex2.Model
+namespace Smartex.Model
 {
     public enum MenuItemType
     {

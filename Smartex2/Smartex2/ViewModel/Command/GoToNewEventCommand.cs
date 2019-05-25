@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Smartex2.ViewModel.Command
+namespace Smartex.ViewModel.Command
 {
     public class GoToNewEventCommand : ICommand
     {

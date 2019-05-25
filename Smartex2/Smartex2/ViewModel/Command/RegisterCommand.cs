@@ -1,8 +1,8 @@
-﻿using Smartex2.Model;
+﻿using Smartex.Model;
 using System;
 using System.Windows.Input;
 
-namespace Smartex2.ViewModel.Command
+namespace Smartex.ViewModel.Command
 {
     public class RegisterCommand : ICommand
     {
@@ -15,7 +15,7 @@ namespace Smartex2.ViewModel.Command
         public event EventHandler CanExecuteChanged;
         public bool CanExecute(object parameter)
         {
-            var user = (User)parameter;
+            var user = (UserPersonalInfo)parameter;
 
             if (user == null)
             {
@@ -27,7 +27,6 @@ namespace Smartex2.ViewModel.Command
             var ifFirstName = string.IsNullOrEmpty(user.FirstName);
             var ifLastName = string.IsNullOrEmpty(user.LastName);
             var ifLogin = string.IsNullOrEmpty(user.Login);
-            var ifEmail = string.IsNullOrEmpty(user.Email);
             var ifPassword = string.IsNullOrEmpty(user.Password);
             var ifUniversity = string.IsNullOrEmpty(user.University);
             var ifFaculty = string.IsNullOrEmpty(user.Faculty);
