@@ -22,7 +22,6 @@ namespace Smartex.ViewModel.Command
                 return false;
             }
 
-            return true;
             //coś nie działa
             var ifFirstName = string.IsNullOrEmpty(user.FirstName);
             var ifLastName = string.IsNullOrEmpty(user.LastName);

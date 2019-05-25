@@ -87,7 +87,8 @@ namespace Smartex.ViewModel
         {
             try
             {
-                await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
+                //logowanie działa - kowalski/qwe, trzeba dlugo czekac wiec komentuję
+                //await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE);
 
             }

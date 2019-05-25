@@ -332,6 +332,14 @@ namespace Smartex.Model
             {
                 throw;
             }
+            catch (ArgumentNullException)
+            {
+                throw;
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
             catch (System.Exception)
             {
                 throw new UnknownException();

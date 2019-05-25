@@ -49,7 +49,7 @@
                 <Button x:Name="registerButton"
                     Text="Zarejestruj się"
                     Command="{Binding RegisterCommand}"
-                    CommandParameter="{Binding User}"/>
+                    CommandParameter="{Binding UserPersonalInfoProp}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

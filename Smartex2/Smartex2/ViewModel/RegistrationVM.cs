@@ -1,7 +1,10 @@
-﻿using Smartex.Annotations;
+﻿using System;
+using Smartex.Annotations;
+using Smartex.Exception;
 using Smartex.Model;
 using Smartex.ViewModel.Command;
 using System.ComponentModel;
+using System.Net.Http;
 using Xamarin.Forms;
 
 namespace Smartex.ViewModel
@@ -13,7 +16,6 @@ namespace Smartex.ViewModel
         private string _firstName;
         private string _lastName;
         private string _login;
-        private string _email;
         private string _password;
         private string _university;
         private string _faculty;
@@ -23,7 +25,11 @@ namespace Smartex.ViewModel
         public UserPersonalInfo UserPersonalInfoProp
         {
             get { return _user; }
-            set { _user = value; }
+            set
+            {
+                _user = value;
+                OnPropertyChanged("UserPersonalInfoProp");
+            }
         }
         public string FirstName
         {
@@ -31,6 +37,16 @@ namespace Smartex.ViewModel
             set
             {
                 _firstName = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("FirstName");
             }
         }
@@ -42,6 +58,16 @@ namespace Smartex.ViewModel
             set
             {
                 _lastName = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("LastName");
             }
         }
@@ -54,21 +80,19 @@ namespace Smartex.ViewModel
             set
             {
                 _login = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("Login");
             }
         }
-
-        public string Email
-        {
-            get { return _email; }
-            set
-            {
-                _email = value;
-                OnPropertyChanged("Email");
-
-            }
-        }
-
 
         public string Password
         {
@@ -76,6 +100,16 @@ namespace Smartex.ViewModel
             set
             {
                 _password = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("Password");
             }
         }
@@ -87,6 +121,16 @@ namespace Smartex.ViewModel
             set
             {
                 _university = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("University");
             }
         }
@@ -99,6 +143,16 @@ namespace Smartex.ViewModel
             set
             {
                 _faculty = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("Faculty");
             }
         }
@@ -111,6 +165,16 @@ namespace Smartex.ViewModel
             set
             {
                 _fieldOfStudy = value;
+                UserPersonalInfoProp = new UserPersonalInfo()
+                {
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Login = this.Login,
+                    Password = this.Password,
+                    University = this.University,
+                    Faculty = this.Faculty,
+                    FieldOfStudy = this.FieldOfStudy
+                };
                 OnPropertyChanged("FieldOfStudy");
             }
         }
@@ -122,15 +186,27 @@ namespace Smartex.ViewModel
         }
         public async void RegisterUser()
         {
-            bool canRegister = true;
-
-            if (canRegister)
+            try
             {
+                await User.RegisterUser(this.UserPersonalInfoProp);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE); //przejdź na stronę główną
             }
-            else
+            catch (DataFormatException ex)
             {
-                await App.Current.MainPage.DisplayAlert("Błąd", "Rejestracja nie powiodła się", "OK");
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+            }
+            catch (ArgumentNullException ex)
+            {
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+
+            }
+            catch (HttpRequestException ex)
+            {
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+            }
+            catch (System.Exception ex)
+            {
+                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
             }
         }
 
