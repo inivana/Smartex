@@ -45,7 +45,6 @@ namespace Smartex.Model
         // use: sieganie po eventy usera
         public static async Task<List<Event>> GetEvents(int userID)
         {
-
             try
             {
                 ServerAnswerRecievedEvents recievedEvent = JsonConvert.DeserializeObject<ServerAnswerRecievedEvents>
@@ -69,8 +68,6 @@ namespace Smartex.Model
             {
                 throw new UnknownException();
             }
-
-
         }
 
         // use: sieganie po posty w konkretnym eventcie
@@ -344,7 +341,6 @@ namespace Smartex.Model
             {
                 throw new UnknownException();
             }
-
         }
         //use: usuwa z pliku login,haslo
         public static void Logout()
@@ -352,6 +348,5 @@ namespace Smartex.Model
             ClientBackend.RemoveCredentials();
             //try catch throw new UnExpectedException();
         }
-
     }
 }

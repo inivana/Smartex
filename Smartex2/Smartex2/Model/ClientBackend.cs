@@ -2,9 +2,7 @@
 using Smartex.Exception;
 using Smartex.Server;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +11,7 @@ namespace Smartex.Model
     class ClientBackend
     {
         public static System.Uri api_domain = new System.Uri("https://opclouden.pythonanywhere.com/");
-        public static HttpClientHandler handler;
+        public static HttpClientHandler handler = new HttpClientHandler();
         public static HttpClient client;
         public CancellationTokenSource tokenSource = new CancellationTokenSource();
         private static System.Net.CredentialCache credentialCache = new System.Net.CredentialCache();
@@ -55,8 +53,21 @@ namespace Smartex.Model
 
                 return responseContent;
             }
-            catch (System.Exception)
+            catch (ArgumentNullException)
             {
+                throw;
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+            catch (NullReferenceException)
+            {
+                throw;
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
                 throw new UnknownException();
             }
 

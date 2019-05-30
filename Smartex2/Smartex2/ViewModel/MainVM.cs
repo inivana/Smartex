@@ -10,11 +10,6 @@ namespace Smartex.ViewModel
 {
     public class MainVM : INotifyPropertyChanged
     {
-        /* TODO
-         * po dodaniu klasy User zrobić tu properties na email, password i usera
-         * zbindować dane w xamlu
-         * zrobić nawigację do strony głównej
-         */
         public LoginCommand LoginCommand { get; set; }
         public GoToRegistrationPageCommand GoToRegistrationPageCommand { get; set; }
 
@@ -88,7 +83,7 @@ namespace Smartex.ViewModel
             try
             {
                 //logowanie działa - kowalski/qwe, trzeba dlugo czekac wiec komentuję
-                //await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
+                await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE);
 
             }

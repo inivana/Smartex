@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Smartex.Model
 {
-    class Post
+    public class Post
     {
         [JsonProperty(PropertyName = "id")]
         public int ID { get; set; }
