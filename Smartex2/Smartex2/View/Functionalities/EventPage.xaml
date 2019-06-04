@@ -15,8 +15,6 @@
 
     <ContentPage>
         <ListView x:Name="PostsListView"
-            BindingContext="{Binding PostsCollection}"
-            ItemsSource="{Binding PostsCollection}"
             SelectionMode="Single">
             <!--Built in Cells-->
             <ListView.ItemTemplate>
@@ -27,7 +25,8 @@
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding Post.Content}" />
+                            <Label Grid.Column="0" Text="{Binding Content}" />
+                            <Label Grid.Column="1" Text="{Binding UserID}" />
                         </Grid>
                     </ViewCell>
 

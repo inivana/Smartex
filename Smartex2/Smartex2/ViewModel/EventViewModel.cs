@@ -24,7 +24,7 @@ namespace Smartex.ViewModel
             set
             {
                 _selectedEvent = value;
-                SetPostsCollectionAsync(SelectedEvent.ID);
+                //SetPostsCollectionAsync(SelectedEvent.ID);
                 this.PostsCollection.Add(new Post()
                 {
                     Content = "kontent"
