@@ -6,9 +6,9 @@ namespace Smartex.ViewModel.Command
 {
     public class LoginCommand : ICommand
     {
-        public MainVM ViewModel { get; set; }
+        public MainViewModel ViewModel { get; set; }
 
-        public LoginCommand(MainVM viewModel)
+        public LoginCommand(MainViewModel viewModel)
         {
             this.ViewModel = viewModel;
         }

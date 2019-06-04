@@ -8,7 +8,7 @@ using Smartex.Exception;
 
 namespace Smartex.ViewModel
 {
-    public class MainVM : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
         public LoginCommand LoginCommand { get; set; }
         public GoToRegistrationPageCommand GoToRegistrationPageCommand { get; set; }
@@ -58,7 +58,7 @@ namespace Smartex.ViewModel
         }
 
         //konstruktor
-        public MainVM()
+        public MainViewModel()
         {
             this.UserPersonalInfoProp = new UserPersonalInfo();
             this.LoginCommand = new LoginCommand(this);

@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Smartex.ViewModel
 {
-    public class RegistrationVM : INotifyPropertyChanged
+    public class RegistrationViewModel : INotifyPropertyChanged
     {
         public RegisterCommand RegisterCommand { get; set; }
         private UserPersonalInfo _user;
@@ -179,7 +179,7 @@ namespace Smartex.ViewModel
             }
         }
 
-        public RegistrationVM()
+        public RegistrationViewModel()
         {
             this._user = new UserPersonalInfo();
             this.RegisterCommand = new RegisterCommand(this);

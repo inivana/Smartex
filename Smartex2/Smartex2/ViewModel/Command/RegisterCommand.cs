@@ -6,9 +6,9 @@ namespace Smartex.ViewModel.Command
 {
     public class RegisterCommand : ICommand
     {
-        public RegistrationVM ViewModel { get; set; }
+        public RegistrationViewModel ViewModel { get; set; }
 
-        public RegisterCommand(RegistrationVM viewModel)
+        public RegisterCommand(RegistrationViewModel viewModel)
         {
             this.ViewModel = viewModel;
         }

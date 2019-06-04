@@ -1,34 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Smartex.View.Functionalities.EventPage">
+    <ContentPage>
+        <StackLayout BindingContext="{Binding SelectedEvent}">
+            <Label Text="Informacje o wydarzeniu"/>
+            <Label x:Name="EventNameLabel" Text="{Binding Name}"/>
+            <Label x:Name="DescriptionLabel" Text="{Binding Desc}"/>
+            <Label x:Name="StartDateLabel" Text="{Binding StartDate}"/>
+            <Label x:Name="CreationDateLabel" Text="{Binding CreationDate}"/>
 
-    <ListView x:Name="MyListView"
-            ItemsSource="{Binding Items}"
-            ItemTapped="Handle_ItemTapped"
-            CachingStrategy="RecycleElement">
-            
-    <!--Built in Cells-->
-    <ListView.ItemTemplate>
-        <DataTemplate>
-            <TextCell Text="{Binding .}" />
-        </DataTemplate>
-    </ListView.ItemTemplate>
-    
-    <!--Custom View Cells-->
-    <!--
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <StackLayout>
-            <Label Text="{Binding Text}" 
-                   Style="{DynamicResource ListItemTextStyle}" />
-            <Label Text="{Binding Detail}" 
-                   Style="{DynamicResource ListItemDetailTextStyle}"/>
-          </StackLayout>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-    -->
-  </ListView>
-</ContentPage>
+        </StackLayout>
+    </ContentPage>
+
+    <ContentPage>
+        <ListView x:Name="PostsListView"
+            BindingContext="{Binding PostsCollection}"
+            ItemsSource="{Binding PostsCollection}"
+            SelectionMode="Single">
+            <!--Built in Cells-->
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding Post.Content}" />
+                        </Grid>
+                    </ViewCell>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage>
+
+</CarouselPage>

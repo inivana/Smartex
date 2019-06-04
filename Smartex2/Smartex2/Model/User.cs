@@ -3,6 +3,8 @@ using Smartex.Exception;
 using Smartex.Server;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace Smartex.Model
 {
     class User
     {
-        private static List<Event> events = new List<Event>();
+        private static ObservableCollection<Event> events = new ObservableCollection<Event>();
         private static Dictionary<int, Event> eventMap = new Dictionary<int, Event>();
 
         // use: sieganie po zasoby usera( W TRAKCIE UZYTKOWANIA APPKI)
@@ -26,7 +28,10 @@ namespace Smartex.Model
                 {
                     return recievedUser.User;
                 }
-                else throw new DataFormatException();
+                else
+                {
+                    throw new DataFormatException();
+                }
             }
             catch (TaskCanceledException)
             {
@@ -43,7 +48,7 @@ namespace Smartex.Model
         }
 
         // use: sieganie po eventy usera
-        public static async Task<List<Event>> GetEvents(int userID)
+        public static async Task<ObservableCollection<Event>> GetEvents(int userID)
         {
             try
             {
@@ -54,11 +59,22 @@ namespace Smartex.Model
                 {
                     eventMap.Clear();
                     events = recievedEvent.EventList;
-                    if (events == null) throw new UnknownException();
-                    foreach (Event element in events) eventMap.Add(element.ID, element);
+                    if (events == null)
+                    {
+                        throw new UnknownException();
+                    }
+
+                    foreach (Event element in events)
+                    {
+                        eventMap.Add(element.ID, element);
+                    }
+
                     return events;
                 }
-                else throw new DataFormatException();
+                else
+                {
+                    throw new DataFormatException();
+                }
             }
             catch (DataFormatException)
             {
@@ -71,7 +87,7 @@ namespace Smartex.Model
         }
 
         // use: sieganie po posty w konkretnym eventcie
-        public static async Task<List<Post>> GetPosts(int eventID)
+        public static async Task<ObservableCollection<Post>> GetPosts(int eventID)
         {
             try
             {
@@ -81,10 +97,17 @@ namespace Smartex.Model
                 if (sarp.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
                 {
                     eventMap[eventID].Posts = sarp.PostList;
-                    if (eventMap[eventID].Posts == null) throw new System.Exception();
+                    if (eventMap[eventID].Posts == null)
+                    {
+                        throw new System.Exception();
+                    }
+
                     return eventMap[eventID].Posts;
                 }
-                else throw new DataFormatException();
+                else
+                {
+                    throw new DataFormatException();
+                }
             }
             catch (DataFormatException)
             {
@@ -94,8 +117,6 @@ namespace Smartex.Model
             {
                 throw new UnknownException();
             }
-
-
         }
 
 
@@ -174,8 +195,9 @@ namespace Smartex.Model
                 ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
 
                 if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
                     throw new DataFormatException();
-
+                }
             }
             catch (DataFormatException)
             {
@@ -197,7 +219,9 @@ namespace Smartex.Model
                 ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
 
                 if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
                     throw new DataFormatException();
+                }
             }
             catch (DataFormatException)
             {
@@ -251,7 +275,9 @@ namespace Smartex.Model
 
 
                 if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+                {
                     throw new DataFormatException();
+                }
             }
             catch (DataFormatException)
             {
@@ -266,14 +292,22 @@ namespace Smartex.Model
 
         public static Event GetEvent(int eventID)
         {
-            if (!eventMap.ContainsKey(eventID)) throw new System.Exception(); //do zmiany
+            if (!eventMap.ContainsKey(eventID))
+            {
+                throw new System.Exception(); //do zmiany
+            }
+
             return eventMap[eventID];
         }
 
         public static Post GetPost(int postID, int eventID)
         {
-            if (!eventMap.ContainsKey(eventID)) throw new System.Exception(); //do zmiany
-            return eventMap[eventID].Posts.Find(post => post.ID == postID); // ArgumentNullException
+            if (!eventMap.ContainsKey(eventID))
+            {
+                throw new System.Exception(); //do zmiany
+            }
+
+            return eventMap[eventID].Posts.FirstOrDefault(post => post.ID == postID); // ArgumentNullException
         }
 
         // use: tylko po przycisku zaloguj
@@ -293,7 +327,9 @@ namespace Smartex.Model
                     //jesli nie exception  throw new LoginException()
                 }
                 else
+                {
                     throw new LoginException();
+                }
             }
             catch (LoginException)
             {
@@ -323,7 +359,9 @@ namespace Smartex.Model
                     ClientBackend.StroreCredentials(userPersonalInfo.Login, userPersonalInfo.Password);
                 }
                 else
+                {
                     throw new DataFormatException();
+                }
             }
             catch (DataFormatException)
             {

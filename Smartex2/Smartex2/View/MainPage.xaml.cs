@@ -10,11 +10,11 @@ namespace Smartex
 {
     public partial class MainPage : ContentPage
     {
-        private MainVM viewModel;
+        private MainViewModel viewModel;
         public MainPage()
         {
             InitializeComponent();
-            viewModel = new MainVM();
+            viewModel = new MainViewModel();
             BindingContext = viewModel;
         }
     }

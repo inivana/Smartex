@@ -12,7 +12,7 @@ namespace Smartex.Model
     {
         public static System.Uri api_domain = new System.Uri("https://opclouden.pythonanywhere.com/");
         public static HttpClientHandler handler = new HttpClientHandler();
-        public static HttpClient client;
+        public static HttpClient client = new HttpClient();
         public CancellationTokenSource tokenSource = new CancellationTokenSource();
         private static System.Net.CredentialCache credentialCache = new System.Net.CredentialCache();
 

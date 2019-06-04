@@ -5,9 +5,9 @@ namespace Smartex.ViewModel.Command
 {
     public class GoToNewEventCommand : ICommand
     {
-        private HomeVM _viewModel;
+        private HomeViewModel _viewModel;
 
-        public GoToNewEventCommand(HomeVM viewModel)
+        public GoToNewEventCommand(HomeViewModel viewModel)
         {
             this._viewModel = viewModel;
 

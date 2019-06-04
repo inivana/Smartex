@@ -16,26 +16,23 @@ namespace Smartex.View
 	public partial class HomePage : ContentPage
     {
 
-        private HomeVM _viewModel;
+        private HomeViewModel _viewModel;
 		public HomePage ()
         {
-            //var events = await Task.FromResult<List<Event>>(User.GetEvents(1));
-            //eventListView.ItemsSource = events
-
             InitializeComponent ();
-            this._viewModel = new HomeVM();
+            this._viewModel = new HomeViewModel();
             BindingContext = this._viewModel;
-            GetListEvents(1);
+            GetListEvents(1); //TODO zmienić to ID na ID obecnego usera 
         }
 
         private async void GetListEvents(int id)
         {
             try
             {
-                //TODO 
+                //TODO kolorki, odpowiedni format daty, może opisy kolumn? po kliknięciu w  event wyświetlały się szczegóły
                 //ladne wyswietlanie tych eventow - max 3, format daty odpowiedni + jakies kolorki
                 this._viewModel.Events = await User.GetEvents(id);
-                eventListView.ItemsSource = _viewModel.Events.Take(3);
+                eventListView.ItemsSource = _viewModel.Events.Where(e => e.StartDate != null).OrderBy(e => e.StartDate).Reverse().Take(3);
             }
             catch (ArgumentNullException ex)
             {

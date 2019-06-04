@@ -8,12 +8,12 @@ namespace Smartex.View.Functionalities
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewEventPage : ContentPage
     {
-        private NewEventVM _viewModel;
+        private NewEventViewModel _viewModel;
 
         public NewEventPage()
         {
             InitializeComponent();
-            this._viewModel = new NewEventVM();
+            this._viewModel = new NewEventViewModel();
             BindingContext = this._viewModel;
 
         }

@@ -12,11 +12,11 @@ namespace Smartex.View
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RegistrationPage : ContentPage
     {
-        private RegistrationVM _viewModel;
+        private RegistrationViewModel _viewModel;
 		public RegistrationPage ()
 		{
 			InitializeComponent ();
-            this._viewModel = new RegistrationVM();
+            this._viewModel = new RegistrationViewModel();
             BindingContext = _viewModel;
         }
 	}

@@ -10,7 +10,7 @@
         <StackLayout>
             <Label Style="{StaticResource h1Label}" 
                    Text="Nadchodzące wydarzenia"/>
-            <ListView x:Name="eventListView" ItemsSource="{Binding Events}">
+            <ListView x:Name="eventListView" ItemsSource="{Binding Events}" SelectedItem="{Binding SelectedEvent}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

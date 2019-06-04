@@ -1,44 +1,22 @@
-﻿using System;
+﻿using Smartex.ViewModel;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-
+using Smartex.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Smartex.View.Functionalities
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EventPage : ContentPage
+    public partial class EventPage : CarouselPage
     {
-        public ObservableCollection<string> Items { get; set; }
+        private EventViewModel viewModel;
 
-        public EventPage()
+        public EventPage(Event selectedEvent)
         {
             InitializeComponent();
-
-            Items = new ObservableCollection<string>
-            {
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Item 4",
-                "Item 5"
-            };
-			
-			MyListView.ItemsSource = Items;
-        }
-
-        async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item == null)
-                return;
-
-            await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
-
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
+            this.viewModel = new EventViewModel();
+            viewModel.SelectedEvent = selectedEvent;
+            BindingContext = this.viewModel;
         }
     }
 }

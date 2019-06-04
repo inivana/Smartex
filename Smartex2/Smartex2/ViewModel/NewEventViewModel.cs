@@ -6,10 +6,12 @@ using System.Text;
 using Smartex.ViewModel.Command;
 using Smartex.Model;
 using System.Globalization;
+using Smartex.View;
+using Xamarin.Forms;
 
 namespace Smartex.ViewModel
 {
-    class NewEventVM : INotifyPropertyChanged
+    class NewEventViewModel : INotifyPropertyChanged
     {
         private Event _event;
 
@@ -94,7 +96,7 @@ namespace Smartex.ViewModel
             }
         }
 
-        public NewEventVM()
+        public NewEventViewModel()
         {
             this.EventProperty = new Event();
             this.AddEventCommand = new AddEventCommand(this);
@@ -104,6 +106,8 @@ namespace Smartex.ViewModel
         {
             EventProperty.UserID = 1;
             await User.AddEvent(EventProperty);
+            await App.Current.MainPage.DisplayAlert("Dodano wydarzenie", "Udało się dodać wydarzenie", "OK");
+            (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new HomePage()));
         }
     }
 }

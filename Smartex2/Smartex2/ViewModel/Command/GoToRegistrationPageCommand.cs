@@ -8,9 +8,9 @@ namespace Smartex.ViewModel.Command
 {
     public class GoToRegistrationPageCommand : ICommand
     {
-        public MainVM ViewModel { get; set; }
+        public MainViewModel ViewModel { get; set; }
 
-        public GoToRegistrationPageCommand(MainVM viewModel)
+        public GoToRegistrationPageCommand(MainViewModel viewModel)
         {
             this.ViewModel = viewModel;
         }

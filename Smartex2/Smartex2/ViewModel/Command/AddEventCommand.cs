@@ -8,8 +8,8 @@ namespace Smartex.ViewModel.Command
 {
     class AddEventCommand : ICommand
     {
-        private NewEventVM viewModel;
-        public AddEventCommand(NewEventVM viewModel)
+        private NewEventViewModel viewModel;
+        public AddEventCommand(NewEventViewModel viewModel)
         {
             this.viewModel = viewModel;
         }
