@@ -11,10 +11,14 @@ namespace Smartex.ViewModel
 {
     public class HomeViewModel : INotifyPropertyChanged
     {
+        #region fields
 
         private string _title;
         private string _startDate;
         private ObservableCollection<Event> _events;
+        private Event _selectedEvent;
+
+        public GoToNewEventCommand GoToNewEventCommand { get; set; }
 
         public ObservableCollection<Event> Events
         {
@@ -25,7 +29,6 @@ namespace Smartex.ViewModel
                 OnPropertyChanged("Events");
             }
         }
-        private Event _selectedEvent;
 
         public Event SelectedEvent
         {
@@ -35,38 +38,24 @@ namespace Smartex.ViewModel
                 _selectedEvent = value;
                 if (_selectedEvent != null)
                 {
-                    //TODO nawigacja!!!
                     (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new EventPage(this.SelectedEvent)));
                 }
                 OnPropertyChanged("SelectedEvent");
             }
         }
 
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                OnPropertyChanged("Title");
-            }
-        }
-        public string StartDate
-        {
-            get { return _startDate; }
-            set
-            {
-                _startDate = value;
-                OnPropertyChanged("StartDate");
-            }
-        }
-        public GoToNewEventCommand GoToNewEventCommand { get; set; }
+        #endregion
+
+        #region ctor
 
         public HomeViewModel()
         {
             this.GoToNewEventCommand = new GoToNewEventCommand(this);
         }
 
+        #endregion
+
+        #region binding
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -78,9 +67,16 @@ namespace Smartex.ViewModel
             }
         }
 
+        #endregion
+
+        #region commandMethods
+
         public void Navigate()
         {
             (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new NewEventPage()));
         }
+
+        #endregion
+
     }
 }

@@ -1,15 +1,18 @@
 ﻿using Smartex.Annotations;
+using Smartex.Exception;
 using Smartex.Model;
+using Smartex.View;
 using Smartex.ViewModel.Command;
 using System.ComponentModel;
-using Smartex.View;
 using Xamarin.Forms;
-using Smartex.Exception;
 
 namespace Smartex.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        #region fields
+
+        public bool CanLogin { get; set; }
         public LoginCommand LoginCommand { get; set; }
         public GoToRegistrationPageCommand GoToRegistrationPageCommand { get; set; }
 
@@ -17,38 +20,13 @@ namespace Smartex.ViewModel
         private string _login;
         private string _password;
 
-        //properties
-        public UserPersonalInfo UserPersonalInfoProp
-        {
-            get { return _user; }
-            set
-            {
-                _user = value;
-                OnPropertyChanged("UserPersonalInfoProp");
-            }
-        }
-        public string Login
-        {
-            get { return _login; }
-            set
-            {
-                _login = value;
-                UserPersonalInfoProp = new UserPersonalInfo()
-                {
-                    Login = this.Login,
-                    Password = this.Password
-                };
-                OnPropertyChanged("Login");
-            }
-        }
-
         public string Password
         {
             get { return _password; }
             set
             {
                 _password = value;
-                UserPersonalInfoProp = new UserPersonalInfo()
+                this.UserPersonalInfo = new UserPersonalInfo()
                 {
                     Login = this.Login,
                     Password = this.Password
@@ -57,15 +35,51 @@ namespace Smartex.ViewModel
             }
         }
 
-        //konstruktor
-        public MainViewModel()
+        public string Login
         {
-            this.UserPersonalInfoProp = new UserPersonalInfo();
-            this.LoginCommand = new LoginCommand(this);
-            this.GoToRegistrationPageCommand = new GoToRegistrationPageCommand(this);
+            get { return _login; }
+            set
+            {
+                _login = value;
+                this.UserPersonalInfo = new UserPersonalInfo()
+                {
+                    Login = this.Login,
+                    Password = this.Password
+                };
+                OnPropertyChanged("Login");
+            }
         }
 
-        //inotify, bindowanie
+        public UserPersonalInfo UserPersonalInfo
+        {
+            get { return _user; }
+            set
+            {
+                _user = value;
+                if (UserPersonalInfo != null && LoginCommand != null)
+                {
+                    this.CanLogin = this.LoginCommand.CanExecute(UserPersonalInfo);
+                }
+                OnPropertyChanged("UserPersonalInfo");
+            }
+        }
+        #endregion
+
+        #region ctor
+
+        public MainViewModel()
+        {
+            this.UserPersonalInfo = new UserPersonalInfo();
+            this.LoginCommand = new LoginCommand(this);
+            this.GoToRegistrationPageCommand = new GoToRegistrationPageCommand(this);
+            this.CanLogin = false;
+        }
+
+        #endregion
+
+
+        #region binding
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -77,13 +91,17 @@ namespace Smartex.ViewModel
             }
         }
 
-        //metody
-        public async void LoginUser()
+        #endregion
+
+
+        #region commandMethods
+
+        public async void LoginUser(UserPersonalInfo user)
         {
             try
             {
                 //logowanie działa - kowalski/qwe, trzeba dlugo czekac wiec komentuję
-                await User.Login(UserPersonalInfoProp.Login, UserPersonalInfoProp.Password);
+                await User.Login(UserPersonalInfo.Login, UserPersonalInfo.Password);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE);
 
             }
@@ -110,5 +128,8 @@ namespace Smartex.ViewModel
                 (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new RegistrationPage()));
             }
         }
+
+        #endregion
+
     }
 }

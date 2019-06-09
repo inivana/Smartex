@@ -1,24 +1,24 @@
 ﻿using Smartex.Annotations;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using Smartex.ViewModel.Command;
 using Smartex.Model;
-using System.Globalization;
 using Smartex.View;
+using Smartex.ViewModel.Command;
+using System;
+using System.ComponentModel;
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace Smartex.ViewModel
 {
     class NewEventViewModel : INotifyPropertyChanged
     {
+        #region fields
+
         private Event _event;
-
         private string _title;
-
         private string _desc;
+        private DateTime _date;
 
+        public AddEventCommand AddEventCommand { get; set; }
         public string Desc
         {
             get { return _desc; }
@@ -53,8 +53,6 @@ namespace Smartex.ViewModel
             }
         }
 
-        private DateTime _date;
-
         public DateTime Date
         {
             get { return _date; }
@@ -72,7 +70,6 @@ namespace Smartex.ViewModel
             }
         }
 
-
         public Event EventProperty
         {
             get { return _event; }
@@ -83,10 +80,10 @@ namespace Smartex.ViewModel
             }
         }
 
-        public AddEventCommand AddEventCommand { get; set; }
+        #endregion
 
+        #region binding
         public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -96,12 +93,19 @@ namespace Smartex.ViewModel
             }
         }
 
+        #endregion
+
+        #region ctor
+
         public NewEventViewModel()
         {
             this.EventProperty = new Event();
             this.AddEventCommand = new AddEventCommand(this);
         }
 
+        #endregion
+
+        #region commandMethods
         public async void AddEvent()
         {
             EventProperty.UserID = 1;
@@ -109,5 +113,8 @@ namespace Smartex.ViewModel
             await App.Current.MainPage.DisplayAlert("Dodano wydarzenie", "Udało się dodać wydarzenie", "OK");
             (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new HomePage()));
         }
+        #endregion
+
+
     }
 }

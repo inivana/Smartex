@@ -7,26 +7,28 @@
              NavigationPage.HasNavigationBar="False"
              NavigationPage.HasBackButton="False">
 
-    <StackLayout VerticalOptions="Center"
+    <StackLayout VerticalOptions="Center" 
         Margin="20">
         <!-- Place new controls here -->
         <Entry x:Name="LoginEntry"
-               Text="{Binding Login, Mode=TwoWay}"
-               Placeholder="Login"/>
+                   Text="{Binding Login, Mode=TwoWay}"
+                   Placeholder="Login"/>
 
         <Entry x:Name="PasswordEntry"
-               Text="{Binding Password, Mode=TwoWay}"
-               Placeholder="Hasło"
-               IsPassword="True"/>
+                   Text="{Binding Password, Mode=TwoWay}"
+                   Placeholder="Hasło"
+                   IsPassword="True"/>
 
         <Button x:Name="LoginButton"
                 Text="Zaloguj"
                 Command="{Binding LoginCommand}"
-                CommandParameter="{Binding UserPersonalInfoProp}"/>
+                CommandParameter="{Binding UserPersonalInfo}"
+                IsEnabled="{Binding CanLogin}"/>
+
         <Button x:Name="RegisterButton"
                 Text="Nie masz konta?"
                 Command="{Binding GoToRegistrationPageCommand}"
-                CommandParameter="{Binding User}"/>
+                CommandParameter="{Binding UserPersonalInfo}"/>
     </StackLayout>
 
 </ContentPage>

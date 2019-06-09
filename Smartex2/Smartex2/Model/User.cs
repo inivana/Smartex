@@ -16,6 +16,20 @@ namespace Smartex.Model
         private static ObservableCollection<Event> events = new ObservableCollection<Event>();
         private static Dictionary<int, Event> eventMap = new Dictionary<int, Event>();
 
+        public static async Task<ServerAnswerRecievedUser> GetUser(int userID)
+        {
+            try
+            {
+                String json = await ClientBackend.GetResponse("/user");
+                ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user/" + userID));
+                return data;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+        }
         // use: sieganie po zasoby usera( W TRAKCIE UZYTKOWANIA APPKI)
         public static UserPersonalInfo GetPersonalInfo()
         {

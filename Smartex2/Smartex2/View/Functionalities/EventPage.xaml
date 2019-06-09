@@ -5,11 +5,31 @@
     <ContentPage>
         <StackLayout BindingContext="{Binding SelectedEvent}">
             <Label Text="Informacje o wydarzeniu"/>
-            <Label x:Name="EventNameLabel" Text="{Binding Name}"/>
-            <Label x:Name="DescriptionLabel" Text="{Binding Desc}"/>
-            <Label x:Name="StartDateLabel" Text="{Binding StartDate}"/>
-            <Label x:Name="CreationDateLabel" Text="{Binding CreationDate}"/>
+            <Grid>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label Text="Nazwa wydarzenia" Grid.Column="0" Grid.Row="0"/>
+                <Label  x:Name="EventNameLabel" Text="{Binding Title}" Grid.Column="1" Grid.Row="0"/>
+
+                <Label Text="Opis wydarzenia" Grid.Column="0" Grid.Row="1"/>
+                <Label x:Name="DescriptionLabel" Text="{Binding Desc}" Grid.Column="1" Grid.Row="1"/>
+
+                <Label Text="Data rozpoczęcia wydarzenia" Grid.Column="0" Grid.Row="2"/>
+                <Label x:Name="StartDateLabel" Text="{Binding StartDate}" Grid.Column="1" Grid.Row="2"/>
+
+                <Label Text="Data utworzenia wydarzenia" Grid.Column="0" Grid.Row="3"/>
+                <Label x:Name="CreationDateLabel" Text="{Binding CreationDate}" Grid.Column="1" Grid.Row="3"/>
+            </Grid>
         </StackLayout>
     </ContentPage>
 
@@ -25,8 +45,9 @@
                                 <ColumnDefinition Width="120" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
+
                             <Label Grid.Column="0" Text="{Binding Content}" />
-                            <Label Grid.Column="1" Text="{Binding UserID}" />
+                            <Label Grid.Column="1" Text="{Binding UserName}" />
                         </Grid>
                     </ViewCell>
 

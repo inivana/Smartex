@@ -1,5 +1,4 @@
 ﻿using Smartex.Model;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,15 +7,20 @@ namespace Smartex.ViewModel
 {
     class EventViewModel : INotifyPropertyChanged
     {
+        #region fields
         private ObservableCollection<Post> _postsCollection;
         private Event _selectedEvent;
+        private string _userName;
 
-        public EventViewModel()
+        public string UserName
         {
-            this.PostsCollection = new ObservableCollection<Post>();
-            this.SelectedEvent = new Event();
-        }
+            get { return _userName; }
+            set
+            {
+                //_userName = User.GetPersonalInfo(this.SelectedEvent.UserID).FirstName + User.GetPersonalInfo(this.SelectedEvent.UserID).LastName;
 
+            }
+        }
 
         public Event SelectedEvent
         {
@@ -33,11 +37,6 @@ namespace Smartex.ViewModel
             }
         }
 
-        private async void SetPostsCollectionAsync(int eventId)
-        {
-            this.PostsCollection = await User.GetPosts(eventId);
-        }
-
         public ObservableCollection<Post> PostsCollection
         {
             get { return _postsCollection; }
@@ -47,11 +46,35 @@ namespace Smartex.ViewModel
                 OnPropertyChanged("PostsCollection");
             }
         }
+        #endregion
+
+        #region ctor
+
+        public EventViewModel()
+        {
+            this.PostsCollection = new ObservableCollection<Post>();
+            this.SelectedEvent = new Event();
+        }
+
+        #endregion
+
+        #region privateMethods
+        private async void SetPostsCollectionAsync(int eventId)
+        {
+            this.PostsCollection = await User.GetPosts(eventId);
+        }
+
+        #endregion
+
+        #region binding
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
+
     }
 }

@@ -6,19 +6,16 @@ namespace Smartex.ViewModel.Command
 {
     public class LoginCommand : ICommand
     {
-        public MainViewModel ViewModel { get; set; }
+        private MainViewModel _viewModel;
 
         public LoginCommand(MainViewModel viewModel)
         {
-            this.ViewModel = viewModel;
+            this._viewModel = viewModel;
         }
 
         public event EventHandler CanExecuteChanged;
         public bool CanExecute(object parameter)
         {
-            /* TODO
-             * walidacja z usera, przekazywanego jako parametr 
-             */
             var user = (UserPersonalInfo)parameter;
 
             if (user == null)
@@ -38,7 +35,7 @@ namespace Smartex.ViewModel.Command
 
         public void Execute(object parameter)
         {
-            ViewModel.LoginUser();
+            this._viewModel.LoginUser((UserPersonalInfo) parameter);
         }
     }
 }
