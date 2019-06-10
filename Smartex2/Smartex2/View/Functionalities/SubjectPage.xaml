@@ -2,8 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Smartex.View.Functionalities.SubjectPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="AddIcon" Text="Usuń przedmiot" Command="{Binding DeleteSubjectCommand}" CommandParameter="{Binding Subject}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="{Binding Subject.Name}" FontAttributes="Bold"></Label>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120"/>

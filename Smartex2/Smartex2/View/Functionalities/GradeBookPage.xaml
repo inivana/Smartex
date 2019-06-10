@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Smartex.View.GradeBookPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Dodaj przedmiot" Command="{Binding CreateNewSubjectCommand}"/>
+        <ToolbarItem x:Name="AddIcon" Text="Dodaj przedmiot" Command="{Binding CreateNewSubjectCommand}"/>
     </ContentPage.ToolbarItems>
         <StackLayout>
             <Label Text="Przedmioty" FontAttributes="Bold"/>

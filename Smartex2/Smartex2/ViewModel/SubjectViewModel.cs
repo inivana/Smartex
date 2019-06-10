@@ -1,9 +1,12 @@
-﻿using Smartex.Annotations;
+﻿using System;
+using Smartex.Annotations;
 using Smartex.Model;
+using Smartex.View;
 using Smartex.ViewModel.Command;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms;
 
 namespace Smartex.ViewModel
 {
@@ -18,6 +21,7 @@ namespace Smartex.ViewModel
 
 
         public AddGradeCommand AddGradeCommand { get; set; }
+        public DeleteSubjectCommand DeleteSubjectCommand { get; set; }
 
         private Subject _subject;
 
@@ -39,6 +43,7 @@ namespace Smartex.ViewModel
             get { return _average; }
             set
             {
+                if (float.IsNaN(value)) Average = 0;
                 _average = value;
                 OnPropertyChanged("Average");
             }
@@ -107,10 +112,8 @@ namespace Smartex.ViewModel
                 _selectedGrade = value;
                 if (SelectedGrade != null)
                 {
-                    GradeBook.DeleteGrade(SelectedGrade);
-                    this.Refresh();
+                    this.DeleteGrade();
                 }
-                this.Grades = GradeBook.GetGrades(this.Subject.Id);
                 OnPropertyChanged("SelectedGrade");
             }
         }
@@ -132,6 +135,7 @@ namespace Smartex.ViewModel
         public SubjectViewModel(Subject subject)
         {
             this.AddGradeCommand = new AddGradeCommand(this);
+            this.DeleteSubjectCommand = new DeleteSubjectCommand(this);
             this.Subject = subject;
             this.Grades = GradeBook.GetGrades(this.Subject.Id);
             this.Average = CountAverage();
@@ -171,6 +175,37 @@ namespace Smartex.ViewModel
         {
             this.Grades = GradeBook.GetGrades(this.Subject.Id);
             this.Average = CountAverage();
+        }
+
+        private async void DeleteGrade()
+        {
+            var result = await GradeBook.DeleteGrade(SelectedGrade);
+            if (result)
+            {
+                this.Refresh();
+                await App.Current.MainPage.DisplayAlert("Powodzenie", "Udało się usunąć ocenę", "OK");
+
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Niepowodzenie", "Nie udało się usunąć oceny", "OK");
+            }
+        }
+
+        public async void DeleteSubject()
+        {
+            //delete suject and grades
+            var result = await GradeBook.DeleteSubject(this.Subject);
+            if (result)
+            {
+                this.Refresh();
+                await App.Current.MainPage.DisplayAlert("Powodzenie", "Udało się usunąć przedmiot", "OK");
+                (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new GradeBookPage()));
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Niepowodzenie", "Nie udało się usunąć przedmiotu", "OK");
+            }
         }
     }
 }

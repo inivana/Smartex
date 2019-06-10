@@ -66,7 +66,6 @@ namespace Smartex.ViewModel
 
         public void Navigate()
         {
-            //navigate to new subject page
             (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new NewSubjectPage()));
         }
     }

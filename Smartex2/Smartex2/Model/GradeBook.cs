@@ -1,6 +1,8 @@
-﻿using SQLite;
+﻿using System;
+using SQLite;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Smartex.ViewModel.Command;
 
 namespace Smartex.Model
 {
@@ -101,6 +103,46 @@ namespace Smartex.Model
                     }
                 }
             }
+            return false;
+        }
+
+        public static async Task<bool> DeleteSubject(Subject subject)
+        {
+            var yesSelected = await App.Current.MainPage.DisplayAlert("Usuń przedmiot", "Czy na pewno chcesz usunąć przedmiot?", "Tak", "Nie");
+            if (yesSelected)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Subject>();
+                    int result = conn.Delete(subject);
+                    var delGrades = DeleteGrades(subject);
+                    if (result > 0 && delGrades == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool DeleteGrades(Subject subject)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Grade>();
+                int result = 0;
+                subject.Grades = new ObservableCollection<Grade>(conn.Table<Grade>().Where(g => g.SubjectId == subject.Id));
+                foreach (var grade in subject.Grades)
+                {
+                    //powinno działać :D 
+                    result += conn.Delete(grade);
+                }
+                if (result > 0)
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
