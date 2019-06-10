@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Smartex.Exception;
 using Smartex.Server;
 using System;
@@ -35,8 +35,6 @@ namespace Smartex.Model
         {
             try
             {
-                //wczytaj dane z pliku i ustaw credential REST.StoreCredential(string login,password);
-                //jesli danych nie ma throw new SessionExpiredException() -> ponowne zalogowanie
                 ServerAnswerRecievedUser recievedUser = ClientBackend.CurrentUser().Result;
                 if (recievedUser.Status.Equals("success"))
                 {
@@ -61,7 +59,6 @@ namespace Smartex.Model
             }
         }
 
-        // use: sieganie po eventy usera
         public static async Task<ObservableCollection<Event>> GetEvents(int userID)
         {
             try
@@ -100,7 +97,6 @@ namespace Smartex.Model
             }
         }
 
-        // use: sieganie po posty w konkretnym eventcie
         public static async Task<ObservableCollection<Post>> GetPosts(int eventID)
         {
             try
@@ -308,7 +304,7 @@ namespace Smartex.Model
         {
             if (!eventMap.ContainsKey(eventID))
             {
-                throw new System.Exception(); //do zmiany
+                throw new System.Exception();
             }
 
             return eventMap[eventID];
@@ -318,87 +314,12 @@ namespace Smartex.Model
         {
             if (!eventMap.ContainsKey(eventID))
             {
-                throw new System.Exception(); //do zmiany
+                throw new System.Exception(); 
             }
 
-            return eventMap[eventID].Posts.FirstOrDefault(post => post.ID == postID); // ArgumentNullException
+            return eventMap[eventID].Posts.FirstOrDefault(post => post.ID == postID); 
         }
 
-        // use: tylko po przycisku zaloguj
-        public static async Task Login(String username, String password)
-        {
-            try
-            {
-                ClientBackend.StroreCredentials(username, password);
-                String json = await ClientBackend.GetResponse("/user");
-
-                ServerAnswerRecievedUser userData = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
-
-                if (userData.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
-                {
-                    //ClientBackend.StroreCredentials(username, password);
-                    //zapisz dane do pliku jesli sie udalo zalogowac
-                    //jesli nie exception  throw new LoginException()
-                }
-                else
-                {
-                    throw new LoginException();
-                }
-            }
-            catch (LoginException)
-            {
-                throw new LoginException();
-            }
-            catch (System.Exception)
-            {
-                throw new UnknownException();
-            }
-        }
-
-
-        public static async Task RegisterUser(UserPersonalInfo userPersonalInfo)
-        {
-            try
-            {
-                string json = JsonConvert.SerializeObject(userPersonalInfo);
-
-                var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/user"),
-                    new StringContent(json, Encoding.UTF8, "application/json"));
-
-                string responseContent = await response.Content.ReadAsStringAsync();
-
-                ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
-                if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
-                {
-                    ClientBackend.StroreCredentials(userPersonalInfo.Login, userPersonalInfo.Password);
-                }
-                else
-                {
-                    throw new DataFormatException();
-                }
-            }
-            catch (DataFormatException)
-            {
-                throw;
-            }
-            catch (ArgumentNullException)
-            {
-                throw;
-            }
-            catch (HttpRequestException)
-            {
-                throw;
-            }
-            catch (System.Exception)
-            {
-                throw new UnknownException();
-            }
-        }
-        //use: usuwa z pliku login,haslo
-        public static void Logout()
-        {
-            ClientBackend.RemoveCredentials();
-            //try catch throw new UnExpectedException();
-        }
+        
     }
 }
