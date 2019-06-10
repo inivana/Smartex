@@ -9,7 +9,7 @@ namespace Smartex.Server
 {
     /**
     * Klasa tworzona na postawie danych przesyłanych z serwera w postaci JSON.
-    * Zawiera dane jak i status żądania serwera, na jego podstawie określane jest czy dane są kompletne.
+    * Zawiera dane jak i status odpowiedzi, na jego podstawie określane jest czy dane są kompletne.
     */
     class ServerAnswerRecievedPosts
     {
