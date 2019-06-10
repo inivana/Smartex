@@ -12,8 +12,8 @@ import datetime
 """
 Error codes
 0 - brak danych w bazie o podanym ID
-1 - za ma³o danych do zrealizowania ¿¹dania
-2 - zapytanie nie spowodowa³o ¿adnych zmian w bazie
+1 - za maÂ³o danych do zrealizowania Â¿Â¹dania
+2 - zapytanie nie spowodowaÂ³o Â¿adnych zmian w bazie
 """
 
 app = Flask(__name__)
@@ -91,7 +91,7 @@ def index():
 
 
 @app.route("/events/<int:user_id>", methods=["GET"])
-# @auth.login_required
+@auth.login_required
 def get_events(user_id):
     r = query_db("SELECT * FROM events where user_id=?", str(user_id))
 
@@ -102,7 +102,7 @@ def get_events(user_id):
 
 
 @app.route("/events", methods=["POST"])
-# @auth.login_required
+@auth.login_required
 def add_event():
     if not {"user_id", "title", "start_date", "desc"}.issubset(request.json.keys()):
         return jsonify(status="failure", code=1, helper="Brakuje {}".format(
@@ -120,7 +120,7 @@ def add_event():
 
 
 @app.route("/events/<int:id>", methods=["PUT"])
-# @auth.login_required
+@auth.login_required
 def update_event(id):
     if execute_db("UPDATE events SET {}=? WHERE id=?".format("=?, ".join(request.json.keys())),
                   (*request.json.values(), str(id))):
@@ -130,7 +130,7 @@ def update_event(id):
 
 
 @app.route("/events/<int:id>", methods=["DELETE"])
-# @auth.login_required
+@auth.login_required
 def delete_event(id):
     if execute_db("DELETE FROM events WHERE id=?", str(id)):
         return jsonify(status="success")
@@ -151,7 +151,7 @@ def delete_event(id):
 
 
 @app.route("/posts/<int:event_id>", methods=["GET"])
-# @auth.login_required
+@auth.login_required
 def get_posts(event_id):
     r = query_db("SELECT * FROM posts where event_id=?", str(event_id))
 
@@ -162,7 +162,7 @@ def get_posts(event_id):
 
 
 @app.route("/posts", methods=["POST"])
-# @auth.login_required
+@auth.login_required
 def add_post():
     if not {"user_id", "event_id", "content"}.issubset(set(request.json.keys())):
         return jsonify(status="failure", code=1,
@@ -179,7 +179,7 @@ def add_post():
 
 
 @app.route("/posts/<int:id>", methods=["PUT"])
-# @auth.login_required
+@auth.login_required
 def update_post(id):
     if execute_db("UPDATE posts SET {}=? WHERE id=?".format("=?, ".join(request.json.keys())),
                   (*request.json.values(), str(id))):
@@ -189,7 +189,7 @@ def update_post(id):
 
 
 @app.route("/posts/<int:id>", methods=["DELETE"])
-# @auth.login_required
+@auth.login_required
 def delete_post(id):
     if execute_db("DELETE FROM posts WHERE id=?", str(id)):
         return jsonify(status="success")
@@ -225,7 +225,7 @@ def get_user(user_id):
 
 
 @app.route("/user", methods=["POST"])
-# @auth.login_required
+@auth.login_required
 def add_user():
     if not {"first_name",
             "last_name",
