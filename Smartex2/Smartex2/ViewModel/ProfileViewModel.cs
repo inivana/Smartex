@@ -38,7 +38,8 @@ namespace Smartex.ViewModel
         {
             try
             {
-                this.UserPersonalInfo = User.GetPersonalInfo();
+                var user = await User.GetPersonalInfo();
+                UserPersonalInfo = user;
                 Console.WriteLine(UserPersonalInfo.Login);
             }
             catch (ArgumentNullException ex)
