@@ -48,6 +48,10 @@ namespace Smartex
             // Handle when your app resumes
         }
 
+        public static async void DisplayException(System.Exception ex)
+        {
+            await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+        }
         private void SetLoginPageAsRootPage(object sender)
         {
             MainPage = new MainPage();

@@ -21,7 +21,6 @@ namespace Smartex.View
             {
                 new HomeMenuItem {Id = MenuItemType.HomePage, Title="Strona główna" },
                 new HomeMenuItem {Id = MenuItemType.Profile, Title="Profil" },
-                new HomeMenuItem {Id = MenuItemType.Calendar, Title="Kalendarz" },
                 new HomeMenuItem {Id = MenuItemType.GradeBook, Title="Dzienniczek" },
                 new HomeMenuItem {Id = MenuItemType.Settings, Title="Ustawienia" },
                 new HomeMenuItem {Id = MenuItemType.Logout, Title="Wyloguj" }

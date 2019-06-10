@@ -42,9 +42,6 @@ namespace Smartex.View
                     case (int)MenuItemType.Profile:
                         MenuPages.Add(id, new NavigationPage(new ProfilePage()));
                         break;
-                    case (int)MenuItemType.Calendar:
-                        MenuPages.Add(id, new NavigationPage(new CalendarPage()));
-                        break;
                     case (int)MenuItemType.GradeBook:
                         MenuPages.Add(id, new NavigationPage(new GradeBookPage()));
                         break;

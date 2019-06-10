@@ -45,7 +45,7 @@ namespace Smartex.Model
                 return data;
             }
             catch (System.Exception)
-            {
+            {   
                 throw new UnknownException();
             }
 

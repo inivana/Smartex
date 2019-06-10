@@ -2,11 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Smartex.View.ProfilePage">
-  <ContentPage.Content>
-    <StackLayout>
-      <Label Text="Statystyki" FontAttributes="Bold"/>
-
-      <Button Text="Zmień swoje dane"/>
-    </StackLayout>
-  </ContentPage.Content>
+    <ContentPage.Content>
+        <StackLayout BindingContext="{Binding UserPersonalInfo}">
+            <Entry Text="{Binding FirstName, Mode=TwoWay}" Placeholder="Imię"/>
+            <Entry Text="{Binding LastName, Mode=TwoWay}" Placeholder="Nazwisko"/>
+            <Entry Text="{Binding Login, Mode=TwoWay}" Placeholder="Login"/>
+            <Entry Text="{Binding University, Mode=TwoWay}" Placeholder="Uniwersytet"/>
+            <Entry Text="{Binding Faculty, Mode=TwoWay}" Placeholder="Wydział"/>
+            <Entry Text="{Binding FieldOfStudy, Mode=TwoWay}" Placeholder="Kierunek"/>
+            <Button Text="Zmień swoje dane"/>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

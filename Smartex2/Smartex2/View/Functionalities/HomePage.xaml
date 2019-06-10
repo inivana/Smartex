@@ -8,7 +8,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Nadchodzące wydarzenia" FontAttributes="Bold"/>
+            <Label Text="Wydarzenia, w których bierzesz udział" FontAttributes="Bold"/>
             <ListView x:Name="eventListView" ItemsSource="{Binding Events}" SelectedItem="{Binding SelectedEvent}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

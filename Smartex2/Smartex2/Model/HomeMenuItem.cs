@@ -8,7 +8,6 @@ namespace Smartex.Model
     {
         HomePage,
         Profile,
-        Calendar,
         GradeBook,
         Settings,
         Logout

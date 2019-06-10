@@ -3,7 +3,9 @@ using Smartex.Exception;
 using Smartex.Model;
 using Smartex.View;
 using Smartex.ViewModel.Command;
+using System;
 using System.ComponentModel;
+using System.Net.Http;
 using Xamarin.Forms;
 
 namespace Smartex.ViewModel
@@ -107,12 +109,22 @@ namespace Smartex.ViewModel
             }
             catch (LoginException ex)
             {
-                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+                App.DisplayException(ex);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                App.DisplayException(ex);
+
+            }
+            catch (HttpRequestException ex)
+            {
+                App.DisplayException(ex);
 
             }
             catch (System.Exception ex)
             {
-                await App.Current.MainPage.DisplayAlert("Błąd", ex.Message, "OK");
+                App.DisplayException(ex);
             }
         }
 
