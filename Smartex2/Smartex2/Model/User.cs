@@ -25,33 +25,34 @@ namespace Smartex.Model
         * Pobiera informacje na temat zalogowanego użytkownika
         * @return UserPersonalInfo 
         */
-        public static UserPersonalInfo GetPersonalInfo()
+       public static async Task<UserPersonalInfo> GetPersonalInfo()
+    {
+        try
         {
-            try
+            ServerAnswerRecievedUser recievedUser = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
+
+            if (recievedUser.Status.Equals("success"))
             {
-                ServerAnswerRecievedUser recievedUser = ClientBackend.CurrentUser().Result;
-                if (recievedUser.Status.Equals("success"))
-                {
-                    return recievedUser.User;
-                }
-                else
-                {
-                    throw new DataFormatException();
-                }
+                return recievedUser.User;
             }
-            catch (TaskCanceledException)
+            else
             {
-                throw;
-            }
-            catch (SessionExpiredException)
-            {
-                throw;
-            }
-            catch (System.Exception)
-            {
-                throw new UnknownException();
+                throw new DataFormatException();
             }
         }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+        catch (SessionExpiredException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
 
 
         /**
