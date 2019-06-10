@@ -33,25 +33,6 @@ namespace Smartex.Model
         }
 
         /**
-         * Zwraca informacje dotyczace konkretnego użytkownika
-         * @return ServerAnswerRecievedUser - informacje dotyczace użytkownika + powodzenie/niepowodzenie
-         */
-        internal static async Task<ServerAnswerRecievedUser> CurrentUser()
-        {
-            try
-            {
-                String json = await ClientBackend.GetResponse("/user");
-                ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
-                return data;
-            }
-            catch (System.Exception)
-            {   
-                throw new UnknownException();
-            }
-
-        }
-
-        /**
          * @param url - adres pod ktory ma zostac wykonane żadanie GET
          * @return JSON
          */
