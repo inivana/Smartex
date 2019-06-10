@@ -188,7 +188,7 @@ namespace Smartex.ViewModel
         {
             try
             {
-                await User.RegisterUser(this.UserPersonalInfoProp);
+                await ClientBackend.RegisterUser(this.UserPersonalInfoProp);
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE); //przejdź na stronę główną
             }
             catch (DataFormatException ex)

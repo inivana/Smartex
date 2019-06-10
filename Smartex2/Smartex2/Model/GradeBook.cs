@@ -43,7 +43,6 @@ namespace Smartex.Model
 
         public static ObservableCollection<Subject> GetSubjects()
         {
-            int rows;
             ObservableCollection<Subject> subjects;
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
