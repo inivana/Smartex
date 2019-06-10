@@ -8,14 +8,19 @@ using System.Threading.Tasks;
 
 namespace Smartex.Model
 {
+    /**
+     * Klasa odpowiedzialna za zarządzanie danymi logowania użytkownika.
+     * Odpowiada także za rejestracje i logowanie.
+     */
     class ClientBackend
     {
+        //adres serwera 
         public static System.Uri api_domain = new System.Uri("https://opclouden.pythonanywhere.com/");
         private static HttpClientHandler handler = new HttpClientHandler();
         private static HttpClient client = new HttpClient();
         private static System.Net.CredentialCache credentialCache = new System.Net.CredentialCache();
 
-
+       //ustawianie JSON'a
         static ClientBackend()
         {
             handler = new HttpClientHandler();
@@ -26,6 +31,10 @@ namespace Smartex.Model
             };
         }
 
+        /**
+         * Zwraca informacje dotyczace konkretnego użytkownika
+         * @return ServerAnswerRecievedUser - informacje dotyczace użytkownika + powodzenie/niepowodzenie
+         */
         internal static async Task<ServerAnswerRecievedUser> CurrentUser()
         {
             try
@@ -40,6 +49,11 @@ namespace Smartex.Model
             }
 
         }
+
+        /**
+         * @param url - adres pod ktory ma zostac wykonane żadanie GET
+         * @return JSON
+         */
         public static async Task<string> GetResponse(string url)
         {
             try
@@ -70,7 +84,12 @@ namespace Smartex.Model
             }
 
         }
-        //use : przy zapisie do pliku  DO DEBUGU: WYWOLUJ JAKO 1 
+
+
+        /**
+         * Zapisuje dane logowania
+        * @param login,hasło używkonika
+        */
         public static void StroreCredentials(String login, String password)
         {
             credentialCache.Add(
@@ -83,7 +102,9 @@ namespace Smartex.Model
             client = new HttpClient(handler);
         }
 
-
+        /**
+         * Usuwa dane logowania
+        */
         public static void RemoveCredentials()
         {
             credentialCache = new System.Net.CredentialCache();
@@ -116,7 +137,10 @@ namespace Smartex.Model
             }
         }
 
-
+        /**
+         * Rejestracja użytkownika
+         * @param UserPersonalInfo - wszystkie potrzebne dane do rejestracji
+         */
         public static async Task RegisterUser(UserPersonalInfo userPersonalInfo)
         {
             try
@@ -129,6 +153,7 @@ namespace Smartex.Model
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
                 if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
                 {
                     StroreCredentials(userPersonalInfo.Login, userPersonalInfo.Password);
