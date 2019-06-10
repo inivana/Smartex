@@ -193,6 +193,27 @@ namespace Smartex.Model
             }
         }
 
+        
+        /**
+        * Pobiera informacje na temat konkretnego użytkownika
+        * @param userID - unikalny identyfikator użytkownika
+        * @return ServerAnswerRecievedUser 
+        */
+        public static async Task<ServerAnswerRecievedUser> GetUser(int userID)
+        {
+            try
+            {
+                String json = await ClientBackend.GetResponse("/user");
+                ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user/" + userID));
+                return data;
+            }
+            catch (System.Exception)
+            {
+                throw new UnknownException();
+            }
+
+        }
+        
         ~ClientBackend()
         {
             handler.Dispose();
