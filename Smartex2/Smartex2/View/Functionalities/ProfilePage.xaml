@@ -3,14 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Smartex.View.ProfilePage">
     <ContentPage.Content>
-        <StackLayout BindingContext="{Binding UserPersonalInfo}">
-            <Entry Text="{Binding FirstName, Mode=TwoWay}" Placeholder="Imię"/>
-            <Entry Text="{Binding LastName, Mode=TwoWay}" Placeholder="Nazwisko"/>
-            <Entry Text="{Binding Login, Mode=TwoWay}" Placeholder="Login"/>
-            <Entry Text="{Binding University, Mode=TwoWay}" Placeholder="Uniwersytet"/>
-            <Entry Text="{Binding Faculty, Mode=TwoWay}" Placeholder="Wydział"/>
-            <Entry Text="{Binding FieldOfStudy, Mode=TwoWay}" Placeholder="Kierunek"/>
-            <Button Text="Zmień swoje dane"/>
+        <StackLayout BindingContext="{Binding UserPersonalInfo}" Margin="50,50,50,50" VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="CenterAndExpand">
+            <Label Text="Twoje dane" FontAttributes="Bold"/>
+            <Label Text="{Binding FirstName, Mode=OneWay, StringFormat='Imię: {0}'}" />
+            <Label Text="{Binding LastName, Mode=OneWay, StringFormat='Nazwisko: {0}'}"/>
+            <Label Text="{Binding Login,Mode=OneWay, StringFormat='Login: {0}'}" />
+            <Label Text="{Binding University, Mode=OneWay, StringFormat='Uczelnia: {0}'}" />
+            <Label Text="{Binding Faculty, Mode=OneWay, StringFormat='Wydział: {0}'}"/>
+            <Label Text="{Binding FieldOfStudy, Mode=OneWay, StringFormat='Kierunek: {0}'}"/>
+
+            <!--Niestety bindowanie tego commanda nie działa, poza tym nie mamy metody update usera w serwerze-->
+            <!--<Button Text="Zmień swoje dane" Command="{Binding UpdateUserCommand}" CommandParameter="{Binding UserPersonalInfo}"/>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

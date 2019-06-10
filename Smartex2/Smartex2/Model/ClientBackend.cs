@@ -168,6 +168,7 @@ namespace Smartex.Model
             try
             {
                 RemoveCredentials();
+                App.CurrentUser = null;
             }
             catch(System.Exception e)
             {

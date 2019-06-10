@@ -104,6 +104,8 @@ namespace Smartex.ViewModel
             {
                 //logowanie działa - kowalski/qwe, trzeba dlugo czekac wiec komentuję
                 await ClientBackend.Login(UserPersonalInfo.Login, UserPersonalInfo.Password);
+                var curruser = await User.GetPersonalInfo();
+                App.CurrentUser.ID = curruser.ID;
                 MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_MAIN_PAGE);
 
             }

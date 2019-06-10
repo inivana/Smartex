@@ -1,4 +1,5 @@
 ﻿using System;
+using Smartex.Model;
 using Smartex.View;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,9 +12,11 @@ namespace Smartex
         public static string DatabaseLocation = string.Empty;
         public static string EVENT_LAUNCH_LOGIN_PAGE = "EVENT_LAUNCH_LOGIN_PAGE";
         public static string EVENT_LAUNCH_MAIN_PAGE = "EVENT_LAUNCH_MAIN_PAGE";
+        public static UserPersonalInfo CurrentUser { get; set; }
         public App()
         {
             InitializeComponent();
+            CurrentUser = new UserPersonalInfo();
 
             MainPage = new MainPage();
 
@@ -24,6 +27,8 @@ namespace Smartex
         public App(string databaseLocation)
         {
             InitializeComponent();
+            CurrentUser = new UserPersonalInfo();
+
 
             MainPage = new MainPage();
 

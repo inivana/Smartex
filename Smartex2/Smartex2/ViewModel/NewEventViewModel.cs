@@ -5,6 +5,8 @@ using Smartex.ViewModel.Command;
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Net.Http;
+using Smartex.Exception;
 using Xamarin.Forms;
 
 namespace Smartex.ViewModel
@@ -108,8 +110,32 @@ namespace Smartex.ViewModel
         #region commandMethods
         public async void AddEvent()
         {
-            EventProperty.UserID = 1;
-            await User.AddEvent(EventProperty);
+            EventProperty.UserID = App.CurrentUser.ID;
+            try
+            {
+                await User.AddEvent(EventProperty);
+            }
+            catch (ArgumentNullException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (HttpRequestException ex )
+            {
+                App.DisplayException(ex);
+            }
+            catch (NullReferenceException ex)
+            {
+                App.DisplayException(ex); 
+            }
+            catch (DataFormatException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (System.Exception ex)
+            {
+                App.DisplayException(ex);
+
+            }
             await App.Current.MainPage.DisplayAlert("Dodano wydarzenie", "Udało się dodać wydarzenie", "OK");
             (App.Current.MainPage as RootPage).NavigateFromPage(new NavigationPage(new HomePage()));
         }

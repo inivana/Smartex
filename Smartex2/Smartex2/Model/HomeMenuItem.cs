@@ -9,7 +9,6 @@ namespace Smartex.Model
         HomePage,
         Profile,
         GradeBook,
-        Settings,
         Logout
     }
     class HomeMenuItem

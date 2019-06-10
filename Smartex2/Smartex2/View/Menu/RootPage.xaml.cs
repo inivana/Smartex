@@ -45,9 +45,6 @@ namespace Smartex.View
                     case (int)MenuItemType.GradeBook:
                         MenuPages.Add(id, new NavigationPage(new GradeBookPage()));
                         break;
-                    case (int)MenuItemType.Settings:
-                        MenuPages.Add(id, new NavigationPage(new SettingsPage()));
-                        break;
                     case (int)MenuItemType.Logout:
                         MenuPages.Add(id, new NavigationPage(new MainPage()));
                         //MessagingCenter.Send<object>(this, App.EVENT_LAUNCH_LOGIN_PAGE);

@@ -1,7 +1,10 @@
-﻿using Smartex.Model;
+﻿using System;
+using Smartex.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
+using Smartex.Exception;
 
 namespace Smartex.ViewModel
 {
@@ -17,8 +20,7 @@ namespace Smartex.ViewModel
             get { return _userName; }
             set
             {
-                //_userName = User.GetPersonalInfo(this.SelectedEvent.UserID).FirstName + User.GetPersonalInfo(this.SelectedEvent.UserID).LastName;
-
+                _userName = User.GetPersonalInfo().Result.FirstName + User.GetPersonalInfo().Result.LastName;
             }
         }
 
@@ -28,11 +30,6 @@ namespace Smartex.ViewModel
             set
             {
                 _selectedEvent = value;
-                //SetPostsCollectionAsync(SelectedEvent.ID);
-                this.PostsCollection.Add(new Post()
-                {
-                    Content = "kontent"
-                });
                 OnPropertyChanged("SelectedEvent");
             }
         }
@@ -50,10 +47,36 @@ namespace Smartex.ViewModel
 
         #region ctor
 
-        public EventViewModel()
+        public EventViewModel(Event selectedEvent)
         {
-            this.PostsCollection = new ObservableCollection<Post>();
-            this.SelectedEvent = new Event();
+            this.SelectedEvent = selectedEvent;
+            try
+            {
+                //TODO NIE DZIAŁA
+                //this.PostsCollection = User.GetPosts(SelectedEvent.ID).Result; 
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (HttpRequestException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (NullReferenceException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (DataFormatException ex)
+            {
+                App.DisplayException(ex);
+            }
+            catch (System.Exception ex)
+            {
+                App.DisplayException(ex);
+
+            }
         }
 
         #endregion

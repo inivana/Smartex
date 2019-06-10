@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Smartex.ViewModel.Command;
+using Xamarin.Forms;
 
 namespace Smartex.ViewModel
 {
@@ -13,6 +15,7 @@ namespace Smartex.ViewModel
     {
         #region fields
 
+        public UpdateUserCommand UpdateUserCommand { get; set; }
         private UserPersonalInfo _userPersonalInfo;
 
         public UserPersonalInfo UserPersonalInfo
@@ -32,7 +35,25 @@ namespace Smartex.ViewModel
         public ProfileViewModel()
         {
             SetUser();
+            this.UpdateUserCommand = new UpdateUserCommand(this);
         }
+        
+        #endregion
+
+        #region binding
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        }
+
+        #endregion
+
+        #region methods
 
         private async void SetUser()
         {
@@ -67,19 +88,19 @@ namespace Smartex.ViewModel
                 App.DisplayException(ex);
             }
         }
+
         #endregion
 
-        #region binding
+        #region command methods
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void UpdateUser(UserPersonalInfo user)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
+            //TODO update user
+            Console.WriteLine(user.Login);
         }
 
         #endregion
+
+
     }
 }

@@ -22,18 +22,16 @@ namespace Smartex.View
         {
             InitializeComponent ();
             this._viewModel = new HomeViewModel();
+            GetListEvents(App.CurrentUser.ID);
             BindingContext = this._viewModel;
-            GetListEvents(1); //TODO zmienić to ID na ID obecnego usera 
         }
 
         private async void GetListEvents(int id)
         {
             try
             {
-                //TODO kolorki, odpowiedni format daty, może opisy kolumn? po kliknięciu w  event wyświetlały się szczegóły
-                //ladne wyswietlanie tych eventow - max 3, format daty odpowiedni + jakies kolorki
                 this._viewModel.Events = await User.GetEvents(id);
-                eventListView.ItemsSource = _viewModel.Events.Where(e => e.StartDate != null && DateTime.Parse(e.StartDate) > DateTime.Now).OrderBy(e => e.StartDate).Take(3);
+                eventListView.ItemsSource = _viewModel.Events.Where(e => e.StartDate != null && DateTime.Parse(e.StartDate) > DateTime.Now).OrderBy(e => e.StartDate);
             }
             catch (ArgumentNullException ex)
             {

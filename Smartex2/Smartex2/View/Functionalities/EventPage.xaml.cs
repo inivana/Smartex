@@ -14,8 +14,7 @@ namespace Smartex.View.Functionalities
         public EventPage(Event selectedEvent)
         {
             InitializeComponent();
-            this.viewModel = new EventViewModel();
-            viewModel.SelectedEvent = selectedEvent;
+            this.viewModel = new EventViewModel(selectedEvent);
             BindingContext = this.viewModel;
             PostsListView.ItemsSource = this.viewModel.PostsCollection;
         }
