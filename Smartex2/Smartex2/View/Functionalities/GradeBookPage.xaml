@@ -1,13 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Smartex.View.GradeBookPage"
-             Style="{StaticResource page}">
-    <ContentPage.Content>
+             x:Class="Smartex.View.GradeBookPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dodaj przedmiot" Command="{Binding CreateNewSubjectCommand}"/>
+    </ContentPage.ToolbarItems>
         <StackLayout>
-            <Label Text="Tu będzie dzienniczek ocen"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Przedmioty" FontAttributes="Bold"/>
+            <ListView x:Name="eventListView" ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="{Binding Name, Mode=OneWay}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
-    </ContentPage.Content>
 </ContentPage>

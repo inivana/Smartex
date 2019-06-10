@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Smartex.View.Functionalities.SubjectPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Grid.Row="0" Text="Opis oceny" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Grid.Row="0" Text="Ocena" FontAttributes="Bold"/>
+            </Grid>
+            
+            <ScrollView>
+                <ListView x:Name="eventListView" ItemsSource="{Binding Grades}" SelectedItem="{Binding SelectedGrade}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Description, Mode=OneWay}"/>
+                                    <Label Grid.Column="1" Text="{Binding IntGrade, Mode=OneWay}"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+            <Label Text="{Binding Path=Average, StringFormat='Średnia ocen: {0:F2}', Mode=TwoWay}"/>
+            <Label Text="Dodaj ocenę" FontAttributes="Bold"/>
+            <Entry x:Name="GradeEntry" Placeholder="Ocena" Keyboard="Numeric" Text="{Binding IntGrade}"/>
+            <Entry x:Name="DescriptionEntry" Placeholder="Opis oceny" Text="{Binding Description}"/>
+            <Button x:Name="AddGradeEntry" Text="Dodaj ocenę" Command="{Binding AddGradeCommand}" CommandParameter="{Binding Grade}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

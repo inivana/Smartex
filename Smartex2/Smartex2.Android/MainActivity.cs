@@ -23,7 +23,7 @@ namespace Smartex.Droid
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            string dbName= "gradebook_db.sqlite";
+            string dbName= "gradebookdb.sqlite";
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             string fullPath = Path.Combine(folderPath, dbName);
             LoadApplication(new App(fullPath));

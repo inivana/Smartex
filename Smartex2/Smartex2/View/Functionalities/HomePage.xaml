@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Smartex.View.HomePage"
-             Style="{StaticResource page}">
+             x:Class="Smartex.View.HomePage">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Dodaj" Command="{Binding GoToNewEventCommand}"/>
     </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <StackLayout>
-            <Label Style="{StaticResource h1Label}" 
-                   Text="Nadchodzące wydarzenia"/>
+            <Label Text="Nadchodzące wydarzenia" FontAttributes="Bold"/>
             <ListView x:Name="eventListView" ItemsSource="{Binding Events}" SelectedItem="{Binding SelectedEvent}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -21,7 +20,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Label Grid.Column="0" Text="{Binding Title, Mode=OneWay}"/>
-                                <Label Grid.Column="1" Text="{Binding StartDate, Mode=OneWay}"/>
+                                <Label Grid.Column="1" Text="{Binding StartDate, StringFormat='{}{0:MM/dd/yyyy a\\t h:mm}', Mode=OneWay}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

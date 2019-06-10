@@ -1,4 +1,5 @@
-﻿using Smartex.ViewModel;
+﻿using System;
+using Smartex.ViewModel;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,7 +16,7 @@ namespace Smartex.View.Functionalities
             InitializeComponent();
             this._viewModel = new NewEventViewModel();
             BindingContext = this._viewModel;
-
+            eventDateEntry.Date = DateTime.Now;
         }
     }
 }

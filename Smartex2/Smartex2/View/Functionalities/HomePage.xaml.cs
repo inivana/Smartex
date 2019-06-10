@@ -8,6 +8,7 @@ using Smartex.Exception;
 using Smartex.Model;
 using Smartex.ViewModel;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace Smartex.View
@@ -32,7 +33,7 @@ namespace Smartex.View
                 //TODO kolorki, odpowiedni format daty, może opisy kolumn? po kliknięciu w  event wyświetlały się szczegóły
                 //ladne wyswietlanie tych eventow - max 3, format daty odpowiedni + jakies kolorki
                 this._viewModel.Events = await User.GetEvents(id);
-                eventListView.ItemsSource = _viewModel.Events.Where(e => e.StartDate != null).OrderBy(e => e.StartDate).Reverse().Take(3);
+                eventListView.ItemsSource = _viewModel.Events.Where(e => e.StartDate != null && DateTime.Parse(e.StartDate) > DateTime.Now).OrderBy(e => e.StartDate).Take(3);
             }
             catch (ArgumentNullException ex)
             {

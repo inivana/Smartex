@@ -21,8 +21,6 @@ namespace Smartex.View
 
         public async void NavigateFromPage(NavigationPage newPage)
         {
-            newPage.BarBackgroundColor = Color.LightPink;
-            newPage.BarTextColor = Color.Black;
             Detail = newPage;
 
             if (Device.RuntimePlatform == Device.Android)
@@ -64,9 +62,6 @@ namespace Smartex.View
 
             if (newPage != null && Detail != newPage)
             {
-                //newPage.BarBackgroundColor = new Color(255, 218, 184, 148);
-                newPage.BarBackgroundColor = Color.LightPink;
-                newPage.BarTextColor = Color.Black;
                 if (id == 5)
                 {
                     NavigationPage.SetHasBackButton(newPage, false);

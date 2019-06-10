@@ -25,7 +25,7 @@ namespace Smartex.iOS
         {
             global::Xamarin.Forms.Forms.Init();
 
-            string dbName = "gradebook_db.sqlite";
+            string dbName = "gradebookdb.sqlite";
             string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
             string fullPath = Path.Combine(folderPath, dbName);
 
