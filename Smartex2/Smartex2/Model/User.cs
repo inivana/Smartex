@@ -11,26 +11,20 @@ using System.Threading.Tasks;
 
 namespace Smartex.Model
 {
+    /**
+     * Model użytkownika umożliwiający na wysyłanie i odbieranie zasobów z serwera
+     */
     class User
     {
+        //lista wydarzen
         private static ObservableCollection<Event> events = new ObservableCollection<Event>();
         private static Dictionary<int, Event> eventMap = new Dictionary<int, Event>();
 
-        public static async Task<ServerAnswerRecievedUser> GetUser(int userID)
-        {
-            try
-            {
-                String json = await ClientBackend.GetResponse("/user");
-                ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user/" + userID));
-                return data;
-            }
-            catch (System.Exception)
-            {
-                throw new UnknownException();
-            }
 
-        }
-        // use: sieganie po zasoby usera( W TRAKCIE UZYTKOWANIA APPKI)
+        /**
+        * Pobiera informacje na temat zalogowanego użytkownika
+        * @return UserPersonalInfo 
+        */
         public static UserPersonalInfo GetPersonalInfo()
         {
             try
@@ -59,6 +53,12 @@ namespace Smartex.Model
             }
         }
 
+
+        /**
+        * Pobiera wydarzenia z serwera
+        * @param userID - identyfikator zalogowanego użytkownika
+        * @return ObservableCollection<Event> 
+        */
         public static async Task<ObservableCollection<Event>> GetEvents(int userID)
         {
             try
@@ -96,7 +96,11 @@ namespace Smartex.Model
                 throw new UnknownException();
             }
         }
-
+        /**
+        * Pobiera posty z konkretnego wydarzenia
+        * @param eventID - identyfikator wydarzenia 
+        * @return ObservableCollection<Post>
+        */
         public static async Task<ObservableCollection<Post>> GetPosts(int eventID)
         {
             try
@@ -129,7 +133,10 @@ namespace Smartex.Model
             }
         }
 
-
+        /**
+        * Wysyła posta 
+        * @param Post 
+        */
         public static async Task AddPost(Post post)
         {
             try
@@ -161,7 +168,10 @@ namespace Smartex.Model
             }
 
         }
-
+        /**
+        * Wysyła wydarzenie
+        * @param Event 
+        */
         public static async Task AddEvent(Event event_)
         {
             try
@@ -191,6 +201,11 @@ namespace Smartex.Model
             }
 
         }
+
+        /**
+        * Wysyła aktualizacje wydarzenia 
+        * @param Event 
+        */
         public static async Task UpdateEvent(Event event_)
         {
             try
@@ -218,6 +233,10 @@ namespace Smartex.Model
                 throw new UnknownException();
             }
         }
+        /**
+        * Wysyła żadanie usunięcia danego wydarzenia 
+        * @param Event  -  wystarczy by zawierał tylko pole ID
+        */
         public static async Task DeleteEvent(Event event_)
         {
             try
@@ -243,7 +262,10 @@ namespace Smartex.Model
             }
 
         }
-
+        /**
+        * Wysyła żadanie aktualizacji danego postu 
+        * @param Post  -  wystarczy by zawierał tylko pole ID
+        */
         public static async Task UpdatePost(Post post)
         {
             try
@@ -273,6 +295,11 @@ namespace Smartex.Model
             }
 
         }
+
+        /**
+        * Wysyła żadanie usunięcia danego postu 
+        * @param Post  -  wystarczy by zawierał tylko pole ID
+        */
         public static async Task DeletePost(Post post)
         {
             try
@@ -299,7 +326,11 @@ namespace Smartex.Model
             }
         }
 
-
+        /**
+        * Pobiera wydarzenie z listy
+        * @param eventID  - identyfikator eventu.
+        *  @return Event
+        */
         public static Event GetEvent(int eventID)
         {
             if (!eventMap.ContainsKey(eventID))
@@ -310,6 +341,14 @@ namespace Smartex.Model
             return eventMap[eventID];
         }
 
+
+
+        /**
+        * Pobiera post z listy
+        * @param eventID  - identyfikator eventu.
+        * @param postID  - identyfikator postu.
+        * @return Post
+        */
         public static Post GetPost(int postID, int eventID)
         {
             if (!eventMap.ContainsKey(eventID))
