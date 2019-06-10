@@ -17,11 +17,6 @@
                    Placeholder="Nazwisko"
                    Text="{Binding LastName, Mode=TwoWay}"/>
 
-                <Entry x:Name="EmailEntry"
-                   Placeholder="Email"
-                   Keyboard="Email"
-                   Text="{Binding Email, Mode=TwoWay}"/>
-
                 <Entry x:Name="LoginEntry"
                        Placeholder="Login"
                        Text="{Binding Login, Mode=TwoWay}"/>
