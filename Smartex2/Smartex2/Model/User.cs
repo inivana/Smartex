@@ -8,9 +8,11 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
             ServerAnswerRecievedUser recievedUser = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
+
+            String json = await ClientBackend.GetResponse("/user");
 
             if (recievedUser.Status.Equals("success"))
             {
@@ -45,7 +47,9 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             ServerAnswerRecievedEvents recievedEvent = JsonConvert.DeserializeObject<ServerAnswerRecievedEvents>
                   (await ClientBackend.GetResponse("/events/" + userID));
@@ -81,7 +85,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             ServerAnswerRecievedPosts recievedPosts = JsonConvert.DeserializeObject
                 <ServerAnswerRecievedPosts>(await ClientBackend.GetResponse("/posts/" + eventID));
@@ -118,7 +123,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             ServerAnswerRecievedPost recievedPost = JsonConvert.DeserializeObject
                 <ServerAnswerRecievedPost>(await ClientBackend.GetResponse("/posts/uniqe/"+postID));
@@ -155,9 +161,10 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
-            ServerAnswerRecievedEvent recievedEvent= JsonConvert.DeserializeObject
+
+            ServerAnswerRecievedEvent recievedEvent = JsonConvert.DeserializeObject
                 <ServerAnswerRecievedEvent>(await ClientBackend.GetResponse("/events/uniqe/" + eventID));
 
             if (recievedEvent.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
@@ -192,7 +199,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             string json = JsonConvert.SerializeObject(post);
 
@@ -233,7 +241,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             string json = JsonConvert.SerializeObject(event_);
 
@@ -273,8 +282,8 @@ class User
     {
         try
         {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
 
             string json = JsonConvert.SerializeObject(event_);
 
@@ -311,7 +320,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/events/" + event_.ID);
 
@@ -346,7 +356,9 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             string json = JsonConvert.SerializeObject(post);
 
@@ -386,7 +398,8 @@ class User
     {
         try
         {
-            if (!ClientBackend.IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
 
             var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/posts/" + post.ID);
 
