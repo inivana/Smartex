@@ -26,7 +26,7 @@ class ClientBackend
     {
         try
         {
-            if (!IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
             HttpResponseMessage response = await client.GetAsync(new Uri(api_domain, url));
 
@@ -64,8 +64,10 @@ class ClientBackend
      * Zapisuje dane logowania
     * @param login,hasło używkonika
     */
-    private static void StroreCredentials(String login, String password)
+    public static void StroreCredentials(String login, String password)
     {
+        RemoveCredentials();
+
         credentialCache.Add(
                  api_domain,
                  "Basic",
@@ -79,7 +81,7 @@ class ClientBackend
     /**
      * Usuwa dane logowania
     */
-    private static void RemoveCredentials()
+    public static void RemoveCredentials()
     {
         credentialCache = new System.Net.CredentialCache();
         handler.Credentials = credentialCache;
@@ -90,9 +92,10 @@ class ClientBackend
     {
         try
         {
-            if (!IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
             StroreCredentials(username, password);
+
             String json = await ClientBackend.GetResponse("/user");
 
             ServerAnswerRecievedUser userData = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
@@ -128,7 +131,7 @@ class ClientBackend
     {
         try
         {
-            if (!IsConnection()) throw new InternetConnectionExcepion();
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
 
             string json = JsonConvert.SerializeObject(userPersonalInfo);
 
@@ -192,9 +195,15 @@ class ClientBackend
     {
         try
         {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
             String json = await ClientBackend.GetResponse("/user");
             ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user/" + userID));
             return data;
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
         }
         catch (System.Exception)
         {
@@ -210,7 +219,7 @@ class ClientBackend
     }
 
 
-    public static bool IsConnection()
+    public static bool IsConnected()
     {
         try
         {
