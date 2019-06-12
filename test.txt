@@ -1,0 +1,870 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+class User
+{
+    /**
+    * Pobiera informacje na temat zalogowanego użytkownika
+    * @return UserPersonalInfo 
+    */
+    public static async Task<UserPersonalInfo> GetPersonalInfo()
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+            ServerAnswerRecievedUser recievedUser = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
+
+            String json = await ClientBackend.GetResponse("/user");
+
+            if (recievedUser.Status.Equals("success"))
+            {
+                return recievedUser.User;
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+
+
+    /**
+    * Pobiera wydarzenia z serwera
+    * @param userID - identyfikator zalogowanego użytkownika
+    * @return ObservableCollection<Event> 
+    */
+    public static async Task<List<Event>> GetEvents(int userID)
+    {
+        try
+        {
+
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            ServerAnswerRecievedEvents recievedEvent = JsonConvert.DeserializeObject<ServerAnswerRecievedEvents>
+                  (await ClientBackend.GetResponse("/events/" + userID));
+
+            if (recievedEvent.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                return recievedEvent.EventList;
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+    /**
+    * Pobiera posty z konkretnego wydarzenia
+    * @param eventID - identyfikator wydarzenia 
+    * @return ObservableCollection<Post>
+    */
+    public static async Task<List<Post>> GetPosts(int eventID)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            ServerAnswerRecievedPosts recievedPosts = JsonConvert.DeserializeObject
+                <ServerAnswerRecievedPosts>(await ClientBackend.GetResponse("/posts/" + eventID));
+
+            if (recievedPosts.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                return recievedPosts.PostList;
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception e)
+        {
+            throw new UnknownException();
+        }
+    }
+
+    /**
+   * Pobiera post
+   * @param postID - identyfikator postu 
+   * @return Post
+   */
+    public static async Task<Post> GetPost(int postID)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            ServerAnswerRecievedPost recievedPost = JsonConvert.DeserializeObject
+                <ServerAnswerRecievedPost>(await ClientBackend.GetResponse("/posts/uniqe/"+postID));
+
+            if (recievedPost.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                return recievedPost.Post;
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception e)
+        {
+            throw new UnknownException();
+        }
+    }
+
+    /**
+    * Pobiera wydarzenie 
+    * @param eventID - identyfikator wydarzenia 
+    * @return Event
+    */
+    public static async Task<Event> GetEvent(int eventID)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            ServerAnswerRecievedEvent recievedEvent = JsonConvert.DeserializeObject
+                <ServerAnswerRecievedEvent>(await ClientBackend.GetResponse("/events/uniqe/" + eventID));
+
+            if (recievedEvent.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                return recievedEvent.Event_;
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception e)
+        {
+            throw new UnknownException();
+        }
+
+    }
+
+    /**
+    * Wysyła posta 
+    * @param Post 
+    */
+    public static async Task AddPost(Post post)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            string json = JsonConvert.SerializeObject(post);
+
+            var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/posts")
+                 , new StringContent(json, Encoding.UTF8, "application/json"));
+
+            response.EnsureSuccessStatusCode();
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new System.Exception();
+        }
+
+    }
+    /**
+    * Wysyła wydarzenie
+    * @param Event 
+    */
+    public static async Task AddEvent(Event event_)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            string json = JsonConvert.SerializeObject(event_);
+
+            var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/events")
+                 , new StringContent(json, Encoding.UTF8, "application/json"));
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+
+    }
+
+    /**
+    * Wysyła aktualizacje wydarzenia 
+    * @param Event 
+    */
+    public static async Task UpdateEvent(Event event_)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            string json = JsonConvert.SerializeObject(event_);
+
+            var response = await ClientBackend.client.PutAsync((ClientBackend.api_domain + "/events/" + event_.ID)
+                 , new StringContent(json, Encoding.UTF8, "application/json"));
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+    /**
+    * Wysyła żadanie usunięcia danego wydarzenia 
+    * @param Event  -  wystarczy by zawierał tylko pole ID
+    */
+    public static async Task DeleteEvent(Event event_)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/events/" + event_.ID);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+
+    }
+    /**
+    * Wysyła żadanie aktualizacji danego postu 
+    * @param Post  -  wystarczy by zawierał tylko pole ID
+    */
+    public static async Task UpdatePost(Post post)
+    {
+        try
+        {
+
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            string json = JsonConvert.SerializeObject(post);
+
+            var response = await ClientBackend.client.PutAsync((ClientBackend.api_domain + "/posts/" + post.ID)
+                 , new StringContent(json, Encoding.UTF8, "application/json"));
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (!serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+
+    }
+
+    /**
+    * Wysyła żadanie usunięcia danego postu 
+    * @param Post  -  wystarczy by zawierał tylko pole ID
+    */
+    public static async Task DeletePost(Post post)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+
+            var response = await ClientBackend.client.DeleteAsync(ClientBackend.api_domain + "/posts/" + post.ID);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+
+            if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+}
+//update & delete
+class ServerFeedback
+{
+    [JsonProperty(PropertyName = "status")]
+    public String Status { get; set; }
+
+
+}
+class ServerAnswerRecievedUser : ServerFeedback
+{
+    [JsonProperty(PropertyName = "result")]
+    public UserPersonalInfo User { get; set; }
+
+
+}
+
+class ServerAnswerRecievedPost : ServerFeedback
+{
+    [JsonProperty(PropertyName = "result")]
+    public Post Post { get; set; }
+}
+
+class ServerAnswerRecievedEvent : ServerFeedback
+{
+    [JsonProperty(PropertyName = "result")]
+    public Event Event_ { get; set; }
+}
+
+class ServerAnswerRecievedEvents : ServerFeedback
+{
+    [JsonProperty(PropertyName = "result")]
+    public List<Event> EventList { get; set; }
+
+}
+
+class ServerAnswerRecievedPosts : ServerFeedback
+{
+    [JsonProperty(PropertyName = "result")]
+    public List<Post> PostList { get; set; }
+}
+
+class UserPersonalInfo
+{
+    [JsonProperty(PropertyName = "id")]
+    public int ID { get; set; }
+    [JsonProperty(PropertyName = "first_name")]
+    public string FirstName { get; set; }
+    [JsonProperty(PropertyName = "last_name")]
+    public string LastName { get; set; }
+    [JsonProperty(PropertyName = "login")]
+    public string Login { get; set; }
+    [JsonProperty(PropertyName = "university")]
+    public string University { get; set; }
+    [JsonProperty(PropertyName = "faculty")]
+    public string Faculty { get; set; }
+    [JsonProperty(PropertyName = "field_of_study")]
+    public string FieldOfStudy { get; set; }
+    [JsonProperty(PropertyName = "password")]
+    public string Password { get; set; }
+}
+
+class Event
+{
+    [JsonProperty(PropertyName = "id")]
+    public int ID { get; set; }
+    [JsonProperty(PropertyName = "title")]
+    public string Title { get; set; }
+    [JsonProperty(PropertyName = "start_date")]
+    public string StartDate { get; set; }
+    [JsonProperty(PropertyName = "desc")]
+    public string Desc { get; set; }
+    [JsonProperty(PropertyName = "creation_date")]
+    public string CreationDate { get; set; }
+    [JsonProperty(PropertyName = "user_id")]
+    public int UserID { get; set; }
+    [JsonIgnore]
+    public List<Post> Posts = new List<Post>();
+}
+
+class Post
+{
+    [JsonProperty(PropertyName = "id")]
+    public int ID { get; set; }
+    [JsonProperty(PropertyName = "user_id")]
+    public int UserID { get; set; }
+    [JsonProperty(PropertyName = "event_id")]
+    public int EventID { get; set; }
+    [JsonProperty(PropertyName = "content")]
+    public string Content { get; set; }
+    [JsonProperty(PropertyName = "creation_date")]
+    public string CreationDate { get; set; }
+}
+
+
+
+class ClientBackend
+{
+    //adres serwera 
+    public static System.Uri api_domain = new System.Uri("https://opclouden.pythonanywhere.com/");
+    private static HttpClientHandler handler = new HttpClientHandler();
+    public static HttpClient client = new HttpClient();
+    private static System.Net.CredentialCache credentialCache = new System.Net.CredentialCache();
+
+    //ustawianie JSON'a
+    static ClientBackend()
+    {
+        handler = new HttpClientHandler();
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        };
+    }
+
+
+    /**
+     * @param url - adres pod ktory ma zostac wykonane żadanie GET
+     * @return JSON
+     */
+    internal static async Task<string> GetResponse(string url)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+            HttpResponseMessage response = await client.GetAsync(new Uri(api_domain, url));
+
+            response.EnsureSuccessStatusCode();
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            return responseContent;
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (ArgumentNullException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            throw;
+        }
+        catch (NullReferenceException)
+        {
+            throw;
+        }
+        catch (System.Exception e)
+        {
+            throw new UnknownException();
+        }
+
+    }
+
+
+    /**
+     * Zapisuje dane logowania
+    * @param login,hasło używkonika
+    */
+    public static void StroreCredentials(String login, String password)
+    {
+        RemoveCredentials();
+
+        credentialCache.Add(
+                 api_domain,
+                 "Basic",
+                  new System.Net.NetworkCredential(login, password));
+
+        handler.Credentials = credentialCache;
+
+        client = new HttpClient(handler);
+    }
+
+    /**
+     * Usuwa dane logowania
+    */
+    public static void RemoveCredentials()
+    {
+        credentialCache = new System.Net.CredentialCache();
+        handler.Credentials = credentialCache;
+        client = new HttpClient(handler);
+    }
+
+    public static async Task Login(String username, String password)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+            StroreCredentials(username, password);
+
+            String json = await ClientBackend.GetResponse("/user");
+
+            ServerAnswerRecievedUser userData = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user"));
+
+            if (!userData.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                RemoveCredentials();
+                throw new LoginException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (LoginException)
+        {
+            throw new LoginException();
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+
+
+
+
+    /**
+     * Rejestracja użytkownika
+     * @param UserPersonalInfo - wszystkie potrzebne dane do rejestracji
+     */
+    public static async Task RegisterUser(UserPersonalInfo userPersonalInfo)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+            string json = JsonConvert.SerializeObject(userPersonalInfo);
+
+            var response = await ClientBackend.client.PostAsync((ClientBackend.api_domain + "/user"),
+                new StringContent(json, Encoding.UTF8, "application/json"));
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            ServerFeedback serverFeedback = JsonConvert.DeserializeObject<ServerFeedback>(responseContent);
+
+            if (serverFeedback.Status.Equals("success", StringComparison.OrdinalIgnoreCase))
+            {
+                StroreCredentials(userPersonalInfo.Login, userPersonalInfo.Password);
+            }
+            else
+            {
+                throw new DataFormatException();
+            }
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (DataFormatException)
+        {
+            throw;
+        }
+        catch (ArgumentNullException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+    }
+
+    public static void Logout()
+    {
+        try
+        {
+            RemoveCredentials();
+        }
+        catch (System.Exception e)
+        {
+            throw new UnknownException();
+        }
+    }
+
+
+    /**
+    * Pobiera informacje na temat konkretnego użytkownika
+    * @param userID - unikalny identyfikator użytkownika
+    * @return ServerAnswerRecievedUser 
+    */
+    public static async Task<ServerAnswerRecievedUser> GetUser(int userID)
+    {
+        try
+        {
+            if (!ClientBackend.IsConnected()) throw new InternetConnectionExcepion();
+
+            String json = await ClientBackend.GetResponse("/user");
+            ServerAnswerRecievedUser data = JsonConvert.DeserializeObject<ServerAnswerRecievedUser>(await ClientBackend.GetResponse("/user/" + userID));
+            return data;
+        }
+        catch (InternetConnectionExcepion)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw new UnknownException();
+        }
+
+    }
+
+    ~ClientBackend()
+    {
+        handler.Dispose();
+        client.Dispose();
+    }
+
+
+    public static bool IsConnected()
+    {
+        try
+        {
+            Ping myPing = new Ping();
+            String host = "google.com";
+            byte[] buffer = new byte[32];
+            int timeout = 1000;
+            PingOptions pingOptions = new PingOptions();
+            PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+            return (reply.Status == IPStatus.Success);
+        }
+        catch (Exception)
+        {
+            throw new InternetConnectionExcepion();
+        }
+    }
+
+}
+
+public class InternetConnectionExcepion : Exception
+{
+    private static String errorMessage = "Brak dostępu do sieci(rybackiej)!";
+    public InternetConnectionExcepion() : base(errorMessage)
+    {
+    }
+    public InternetConnectionExcepion(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+public class UserAlreadyRegisteredException : Exception
+{
+    private static String errorMessage = "Użytkownik o podanym logini!";
+    public UserAlreadyRegisteredException() : base(errorMessage)
+    {
+    }
+    public UserAlreadyRegisteredException(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+public class DataFormatException : Exception
+{
+    private static String errorMessage = "Podane dane mają niewłasciwy format!";
+    public DataFormatException() : base(errorMessage)
+    {
+    }
+    public DataFormatException(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+public class UnknownException : Exception
+{
+    private static String errorMessage = "Ups.. coś poszło nie tak!";
+    public UnknownException() : base(errorMessage)
+    {
+    }
+    public UnknownException(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+public class LoginException : Exception
+{
+    private static String errorMessage = "Podany login lub hasło jest błędne!";
+    public LoginException() : base(errorMessage)
+    {
+    }
+    public LoginException(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+public class TimeRequestException : Exception
+{
+    private static String errorMessage = "Server jest obciążony spórbuj za pare minut!";
+    public TimeRequestException() : base(errorMessage)
+    {
+    }
+    public TimeRequestException(string errorMessage) : base(errorMessage)
+    {
+    }
+}
+
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+
+        static  void Main(string[] args)
+        {
+
+            ClientBackend.RemoveCredentials();
+
+            ClientBackend.Login("kkreis","1234").Wait();
+
+
+            // ClientBackend.Login("kowalski", "qwe").Wait();
+
+            List<Event> eve = User.GetEvents(User.GetPersonalInfo().Result.ID).Result;
+
+            Console.WriteLine(eve.Capacity+ " ID"+ User.GetPersonalInfo().Result.ID);
+
+            foreach(var Event in eve)
+            {
+                Console.WriteLine(Event.ID+" "+Event.Title);
+            }
+
+            Console.ReadKey();
+        }
+      
+    }
+ }
