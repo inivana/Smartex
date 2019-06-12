@@ -62,7 +62,7 @@ namespace Smartex.Model
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<Grade>();
-                grades = new ObservableCollection<Grade>(conn.Table<Grade>().Where(g => g.SubjectId == subjectID).ToList());
+                grades = new ObservableCollection<Grade>(conn.Table<Grade>().Where (g => g.SubjectId == subjectID).ToList());
             }
             return grades;
         }

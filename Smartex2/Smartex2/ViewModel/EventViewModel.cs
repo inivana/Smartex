@@ -50,10 +50,26 @@ namespace Smartex.ViewModel
         public EventViewModel(Event selectedEvent)
         {
             this.SelectedEvent = selectedEvent;
+            this.PostsCollection = new ObservableCollection<Post>();
             try
             {
                 //TODO NIE DZIAŁA
                 //this.PostsCollection = User.GetPosts(SelectedEvent.ID).Result; 
+                this.PostsCollection.Add(new Post()
+                {
+                    Content = "testowy post 1",
+                    CreationDate = DateTime.Now.ToString(),
+                    EventID = this.SelectedEvent.ID,
+                    UserID = 1
+                });
+                this.PostsCollection.Add(new Post()
+                {
+                    Content = "testowy post 2",
+                    CreationDate = DateTime.Now.ToString(),
+                    EventID = this.SelectedEvent.ID,
+                    UserID = 1
+                });
+                //this.UserName = ClientBackend.GetUser(1).Result.User.FirstName + ClientBackend.GetUser(1).Result.User.LastName;
 
             }
             catch (ArgumentNullException ex)
