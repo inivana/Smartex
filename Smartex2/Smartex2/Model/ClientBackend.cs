@@ -64,7 +64,7 @@ class ClientBackend
      * Zapisuje dane logowania
     * @param login,hasło używkonika
     */
-    public static void StroreCredentials(String login, String password)
+    private static void StroreCredentials(String login, String password)
     {
         credentialCache.Add(
                  api_domain,
@@ -79,7 +79,7 @@ class ClientBackend
     /**
      * Usuwa dane logowania
     */
-    public static void RemoveCredentials()
+    private static void RemoveCredentials()
     {
         credentialCache = new System.Net.CredentialCache();
         handler.Credentials = credentialCache;
